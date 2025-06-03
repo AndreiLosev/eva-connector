@@ -1,7 +1,7 @@
 import 'package:eva_connector/src/eva-config/serializable.dart';
 import 'package:eva_connector/src/eva-config/svcs/bus.dart';
 
-class BaseSvc implements Serializable {
+class BaseSvc<T extends Serializable> implements Serializable {
   String oid;
   final bus = Bus();
 
@@ -19,6 +19,8 @@ class BaseSvc implements Serializable {
     shutdown: null,
     startup: 10.0,
   );
+
+  T? config;
 
   BaseSvc(this.oid, this.command);
 
@@ -40,6 +42,7 @@ class BaseSvc implements Serializable {
         'shutdown': timeout.shutdown,
         'startup': timeout.startup,
       },
+      'config': config?.toMap(),
     };
   }
 
@@ -60,5 +63,6 @@ class BaseSvc implements Serializable {
       shutdown: map['timeout']['shutdown'],
       startup: map['timeout']['startup'],
     );
+    config?.loadFromMap(map['config']);
   }
 }
