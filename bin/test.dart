@@ -1,8 +1,7 @@
-import 'dart:convert';
-
-import 'package:eva_connector/src/eva-config/svcs/modbus_controller.dart';
-import 'package:msgpack_dart/msgpack_dart.dart';
+import 'dart:io';
 
 void main(List<String> args) {
-  print(ModbusProtocol.udp);
+  for (var x in Platform.environment.entries) {
+    print("${x.key} => ${x.value}");
+  }
 }

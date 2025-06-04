@@ -47,7 +47,7 @@ class BaseSvc<T extends Serializable> implements Serializable {
   }
 
   @override
-  void loadFromMap(Map<String, dynamic> map) {
+  void loadFromMap(Map map) {
     bus.loadFromMap(map['bus']);
     callTracing = map['call_tracing'];
     command = map['command'];

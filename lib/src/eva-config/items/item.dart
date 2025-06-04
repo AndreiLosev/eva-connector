@@ -18,18 +18,27 @@ sealed class Item implements Serializable {
   }
 
   @override
-  void loadFromMap(Map<String, dynamic> map) {
+  void loadFromMap(Map map) {
     enabled = map['enabled'];
     oid = map['oid'];
   }
 }
 
-class Sensor extends Item {}
+class Sensor extends Item {
+  static const name = 'sensor';
+  Sensor(super.oid);
+}
 
-class Lvar extends Item {}
+class Lvar extends Item {
+  static const name = 'lvar';
+  Lvar(super.oid);
+}
 
 class Unit extends Item {
+  static const name = 'unit';
   Action? action;
+
+  Unit(super.oid);
 
   @override
   Map<String, dynamic> toMap() {
@@ -40,14 +49,17 @@ class Unit extends Item {
   }
 
   @override
-  void loadFromMap(Map<String, dynamic> map) {
+  void loadFromMap(Map map) {
     super.loadFromMap(map);
     action = map['action'];
   }
 }
 
 class Lmacro extends Item {
+  static const name = 'lmacro';
   Action? action;
+
+  Lmacro(super.oid);
 
   @override
   Map<String, dynamic> toMap() {
@@ -58,7 +70,7 @@ class Lmacro extends Item {
   }
 
   @override
-  void loadFromMap(Map<String, dynamic> map) {
+  void loadFromMap(Map map) {
     super.loadFromMap(map);
     action = map['action'];
   }

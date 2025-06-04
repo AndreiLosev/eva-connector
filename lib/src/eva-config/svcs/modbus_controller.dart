@@ -3,7 +3,9 @@ import 'package:eva_connector/src/eva-config/serializable.dart';
 import 'package:eva_connector/src/eva-config/svcs/base_svc.dart';
 
 class ModbusController extends BaseSvc<ModbusConfig> {
-  ModbusController(super.oid, super.command);
+  static const svcCommand = "svc/eva-controller-modbus";
+
+  ModbusController(String oid) : super(oid, ModbusController.svcCommand);
 }
 
 class ModbusConfig implements Serializable {
@@ -50,7 +52,7 @@ class ModbusConfig implements Serializable {
   }
 
   @override
-  void loadFromMap(Map<String, dynamic> map) {
+  void loadFromMap(Map map) {
     actionQueueSize = map['action_queue_size'];
     actionsVerify = map['actions_verify'];
     modbus = (
@@ -98,7 +100,7 @@ class MapItem {
   ModbusRegister reg = Holding(0);
   (int, int?) offset = (0, null);
   String oid;
-  ModbusVaueType? type = ModbusVaueType.uint16;
+  ModbusValueType? type = ModbusValueType.uint16;
   double? valueDelta = 0.5;
   List<({ModbusTrasformFunc func, List<int> params})> transform = [];
 
@@ -121,7 +123,7 @@ class MapItem {
     final res = MapItem(map['oid']);
     res.reg = res.reg.fromString(map['reg']);
     res.offset = _parseOffset(map['offset']);
-    res.type = ModbusVaueType.fromString(map['type']);
+    res.type = ModbusValueType.fromString(map['type']);
     res.valueDelta = map['value_delta'];
     res.transform = (map['transform'] as List)
         .map(
@@ -151,7 +153,7 @@ class MapItem {
 
 class ActionMapItem {
   ModbusRegister reg = Holding(0);
-  ModbusVaueType? type = ModbusVaueType.uint16;
+  ModbusValueType? type = ModbusValueType.uint16;
   int? unit;
 
   Map<String, dynamic> toMap() {
@@ -161,14 +163,14 @@ class ActionMapItem {
   static ActionMapItem loadFromMap(Map<String, dynamic> map) {
     final res = ActionMapItem();
     res.reg = res.reg.fromString(map['reg']);
-    res.type = ModbusVaueType.fromString(map['type']);
+    res.type = ModbusValueType.fromString(map['type']);
     res.unit = map['unit'];
 
     return res;
   }
 }
 
-enum ModbusVaueType with EnumToStrig {
+enum ModbusValueType with EnumToStrig {
   real,
   real32,
   real64,
@@ -187,28 +189,28 @@ enum ModbusVaueType with EnumToStrig {
   uint64,
   qword;
 
-  static ModbusVaueType? fromString(String? str) {
+  static ModbusValueType? fromString(String? str) {
     if (str == null) {
       return null;
     }
     return switch (str) {
-      'real' => ModbusVaueType.real,
-      'real32' => ModbusVaueType.real32,
-      'real64' => ModbusVaueType.real64,
-      'real32b' => ModbusVaueType.real32b,
-      'real64b' => ModbusVaueType.real64b,
-      'uint16' => ModbusVaueType.uint16,
-      'word' => ModbusVaueType.word,
-      'uint32' => ModbusVaueType.uint32,
-      'dword ' => ModbusVaueType.dword,
-      'sint16' => ModbusVaueType.sint16,
-      'int16 ' => ModbusVaueType.int16,
-      'sing32' => ModbusVaueType.sing32,
-      'int32 ' => ModbusVaueType.int32,
-      'sint64' => ModbusVaueType.sint64,
-      'int64 ' => ModbusVaueType.int64,
-      'uint64' => ModbusVaueType.uint64,
-      'qword' => ModbusVaueType.qword,
+      'real' => ModbusValueType.real,
+      'real32' => ModbusValueType.real32,
+      'real64' => ModbusValueType.real64,
+      'real32b' => ModbusValueType.real32b,
+      'real64b' => ModbusValueType.real64b,
+      'uint16' => ModbusValueType.uint16,
+      'word' => ModbusValueType.word,
+      'uint32' => ModbusValueType.uint32,
+      'dword' => ModbusValueType.dword,
+      'sint16' => ModbusValueType.sint16,
+      'int16' => ModbusValueType.int16,
+      'sint32' => ModbusValueType.sing32,
+      'int32' => ModbusValueType.int32,
+      'sint64' => ModbusValueType.sint64,
+      'int64' => ModbusValueType.int64,
+      'uint64' => ModbusValueType.uint64,
+      'qword' => ModbusValueType.qword,
       _ => throw Exception('invalid value type: $str'),
     };
   }

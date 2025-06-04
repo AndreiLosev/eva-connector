@@ -16,7 +16,7 @@ class Action implements Serializable {
   }
 
   @override
-  void loadFromMap(Map<String, dynamic> map) {
+  void loadFromMap(Map map) {
     svc = map['svc'];
     timeout = map['timeout'];
     config = map['config'];
