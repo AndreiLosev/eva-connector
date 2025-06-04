@@ -1,7 +1,7 @@
 class SvcResponse {
   final String id;
   final String launcher;
-  final int pid;
+  final int? pid;
   final String status;
 
   SvcResponse(this.id, this.launcher, this.pid, this.status);
