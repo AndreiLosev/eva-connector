@@ -59,7 +59,7 @@ class EvaClient {
       throw Exception("Not found svc: $oid");
     }
 
-    return _factory.makeSvc(deserialize(frame.payload));
+    return _factory.makeSvc(oid, deserialize(frame.payload));
   }
 
   Future<List<SvcResponse>> getSvcList() async {

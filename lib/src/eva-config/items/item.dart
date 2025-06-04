@@ -51,7 +51,19 @@ class Unit extends Item {
   @override
   void loadFromMap(Map map) {
     super.loadFromMap(map);
-    action = map['action'];
+    if (map['action'] == null) {}
+    action = makeAction(map['action']);
+  }
+
+  Action? makeAction(Map? map) {
+    if (map == null) {
+      return null;
+    }
+
+    final a = Action();
+    a.loadFromMap(map);
+
+    return a;
   }
 }
 

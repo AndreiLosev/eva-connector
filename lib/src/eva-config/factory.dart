@@ -1,12 +1,13 @@
 import 'package:eva_connector/src/eva-config/items/item.dart';
 import 'package:eva_connector/src/eva-config/svcs/base_svc.dart';
 import 'package:eva_connector/src/eva-config/svcs/modbus_controller.dart';
+import 'package:eva_connector/src/exceptions/unsupported_service.dart';
 
 class Factory {
-  BaseSvc makeSvc(Map map) {
+  BaseSvc makeSvc(String oid, Map map) {
     final svc = switch (map['command']) {
-      ModbusController.svcCommand => ModbusController(map['oid']),
-      _ => throw Exception("invelid svc command: ${map['command']}"),
+      ModbusController.svcCommand => ModbusController(oid),
+      _ => throw UnsupportedService(map['command']),
     };
 
     svc.loadFromMap(map);

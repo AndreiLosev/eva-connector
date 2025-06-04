@@ -21,7 +21,7 @@ class Bus implements Serializable {
   }
 
   @override
-  void loadFromMap(Map<String, dynamic> map) {
+  void loadFromMap(Map map) {
     bufSize = map['buf_size'];
     bufTtl = map['buf_ttl'];
     path = map['path'];

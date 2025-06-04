@@ -1,14 +1,16 @@
 import 'package:eva_connector/src/eva-config/enum_to_strig.dart';
 import 'package:eva_connector/src/eva-config/serializable.dart';
 import 'package:eva_connector/src/eva-config/svcs/base_svc.dart';
+import 'package:eva_connector/src/eva-config/svcs/isvc_config.dart';
 
 class ModbusController extends BaseSvc<ModbusConfig> {
   static const svcCommand = "svc/eva-controller-modbus";
 
-  ModbusController(String oid) : super(oid, ModbusController.svcCommand);
+  ModbusController(String oid)
+    : super(oid, ModbusController.svcCommand, ModbusConfig());
 }
 
-class ModbusConfig implements Serializable {
+class ModbusConfig extends ISvcConfig implements Serializable {
   int actionQueueSize = 32;
   bool actionsVerify = true;
   ({String path, ModbusProtocol protocol, int unit}) modbus = (
@@ -22,7 +24,8 @@ class ModbusConfig implements Serializable {
   int queueSize = 32768;
   int retries = 2;
 
-  List<({int count, int? unit, List<MapItem> map})> pull = [];
+  List<({int count, int? unit, ModbusRegister reg, List<MapItem> map})> pull =
+      [];
   Map<String, ActionMapItem> actionMap = {};
 
   @override
@@ -40,13 +43,18 @@ class ModbusConfig implements Serializable {
       'pull_interval': pullInterval,
       'queue_size': queueSize,
       'retries': retries,
-      'pull': pull.map(
-        (e) => {
-          'count': e.count,
-          'unit': e.unit,
-          'map': e.map.map((i) => i.toMap()),
-        },
-      ),
+      'pull': pull
+          .map(
+            (e) => Map.fromEntries(
+              [
+                MapEntry('count', e.count),
+                MapEntry('unit', e.unit),
+                MapEntry('reg', e.reg.toString()),
+                MapEntry('map', e.map.map((i) => i.toMap()).toList()),
+              ].where((e) => e.value != null),
+            ),
+          )
+          .toList(),
       'action_map': actionMap.map((k, v) => MapEntry(k, v.toMap())),
     };
   }
@@ -70,6 +78,7 @@ class ModbusConfig implements Serializable {
           (e) => (
             count: e['count'] as int,
             unit: e['unit'] as int?,
+            reg: ModbusRegister.fromString(e['reg']),
             map: (e['map'] as List).map((e) => MapItem.loadFromMap(e)).toList(),
           ),
         )
@@ -97,42 +106,49 @@ enum ModbusProtocol with EnumToStrig {
 }
 
 class MapItem {
-  ModbusRegister reg = Holding(0);
   (int, int?) offset = (0, null);
   String oid;
   ModbusValueType? type = ModbusValueType.uint16;
   double? valueDelta = 0.5;
-  List<({ModbusTrasformFunc func, List<int> params})> transform = [];
+  List<({ModbusTrasformFunc func, List<int> params})>? transform;
 
   MapItem(this.oid);
 
   Map<String, dynamic> toMap() {
-    return {
-      'reg': reg.toString(),
-      'offset': offset.$2 == null ? offset.$1 : "${offset.$1}/${offset.$2}",
-      'oid': oid,
-      'type': type.toString(),
-      'value_delta': valueDelta,
-      'transform': transform.map(
-        (e) => {'func': e.func.toString(), 'params': e.params},
-      ),
-    };
+    return Map.fromEntries(
+      [
+        MapEntry(
+          'offset',
+          offset.$2 == null ? offset.$1 : "${offset.$1}/${offset.$2}",
+        ),
+        MapEntry('oid', oid),
+        MapEntry('type', type?.toString()),
+        MapEntry('value_delta', valueDelta),
+        MapEntry(
+          'transform',
+          transform?.map(
+            (e) => {'func': e.func.toString(), 'params': e.params},
+          ),
+        ),
+      ].where((e) => e.value != null),
+    );
   }
 
-  static MapItem loadFromMap(Map<String, dynamic> map) {
+  static MapItem loadFromMap(Map map) {
     final res = MapItem(map['oid']);
-    res.reg = res.reg.fromString(map['reg']);
     res.offset = _parseOffset(map['offset']);
     res.type = ModbusValueType.fromString(map['type']);
     res.valueDelta = map['value_delta'];
-    res.transform = (map['transform'] as List)
-        .map(
-          (e) => (
-            func: ModbusTrasformFunc.fromString(e['func']),
-            params: (e['params'] as List).map((e) => e as int).toList(),
-          ),
-        )
-        .toList();
+    res.transform = map['transform'] is List
+        ? map['transform']
+              .map(
+                (e) => (
+                  func: ModbusTrasformFunc.fromString(e['func']),
+                  params: (e['params'] as List).map((e) => e as int).toList(),
+                ),
+              )
+              .toList()
+        : null;
 
     return res;
   }
@@ -157,12 +173,18 @@ class ActionMapItem {
   int? unit;
 
   Map<String, dynamic> toMap() {
-    return {'reg': reg.toString(), 'type': type?.toString(), 'unit': unit};
+    return Map.fromEntries(
+      [
+        MapEntry('reg', reg.toString()),
+        MapEntry('type', type?.toString()),
+        MapEntry('unit', unit),
+      ].where((e) => e.value != null),
+    );
   }
 
-  static ActionMapItem loadFromMap(Map<String, dynamic> map) {
+  static ActionMapItem loadFromMap(Map map) {
     final res = ActionMapItem();
-    res.reg = res.reg.fromString(map['reg']);
+    res.reg = ModbusRegister.fromString(map['reg']);
     res.type = ModbusValueType.fromString(map['type']);
     res.unit = map['unit'];
 
@@ -259,7 +281,7 @@ sealed class ModbusRegister {
     };
   }
 
-  ModbusRegister fromString(String str) {
+  static ModbusRegister fromString(String str) {
     final t = str.substring(0, 1);
     final v = int.parse(str.substring(1));
     return switch (t) {

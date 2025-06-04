@@ -1,0 +1,151 @@
+version: 4
+content:
+  - node: ".local"
+    items:
+      - enabled: true
+        oid: "unit:tank1/pump"
+        action:
+          svc: "eva.controller.modbus1"
+      - enabled: true
+        oid: "unit:tank1/valve1"
+        action:
+          svc: "eva.controller.modbus1"
+      - enabled: true
+        oid: "unit:tank1/valve2"
+        action:
+          svc: "eva.controller.modbus1"
+      - enabled: true
+        oid: "unit:tank2/pump"
+        action:
+          svc: "eva.controller.modbus1"
+      - enabled: true
+        oid: "unit:tank2/valve1"
+        action:
+          svc: "eva.controller.modbus1"
+      - enabled: true
+        oid: "unit:tank2/valve2"
+        action:
+          svc: "eva.controller.modbus1"
+      - enabled: true
+        oid: "sensor:tank1/a_level"
+      - enabled: true
+        oid: "sensor:tank1/a_volume"
+      - enabled: true
+        oid: "sensor:tank1/bottom_level"
+      - enabled: true
+        oid: "sensor:tank1/top_level"
+      - enabled: true
+        oid: "sensor:tank1/valve1"
+      - enabled: true
+        oid: "sensor:tank1/valve2"
+      - enabled: true
+        oid: "sensor:tank2/a_level"
+      - enabled: true
+        oid: "sensor:tank2/a_volume"
+      - enabled: true
+        oid: "sensor:tank2/bottom_level"
+      - enabled: true
+        oid: "sensor:tank2/top_level"
+      - enabled: true
+        oid: "sensor:tank2/valve1"
+      - enabled: true
+        oid: "sensor:tank2/valve2"
+      - enabled: true
+        oid: "sensor:test-1/value-1"
+      - enabled: true
+        oid: "sensor:test-1/value-2"
+      - enabled: true
+        oid: "sensor:test1/value1"
+    svcs:
+      - id: "eva.controller.modbus1"
+        params:
+          bus:
+            buf_size: 8192
+            buf_ttl: 10
+            path: "var/bus.ipc"
+            queue_size: 8192
+            timout: null
+            type: "native"
+          call_tracing: false
+          command: "svc/eva-controller-modbus"
+          user: "nobody"
+          workers: 1
+          enabled: true
+          launcher: "eva.launcher.main"
+          mem_warn: 134217728
+          prepare_command: null
+          react_to_fail: true
+          timeout:
+            default: null
+            shutdown: null
+            startup: 10.0
+          config:
+            action_queue_size: 32
+            actions_verify: true
+            modbus:
+              path: "127.0.0.1:5020"
+              protocol: "tcp"
+              unit: 1
+            panic_in: null
+            pull_cache_sec: 360
+            pull_interval: 1
+            queue_size: 32768
+            retries: 2
+            pull:
+              - count: 2
+                reg: "h0"
+                map:
+                  - offset: 0
+                    oid: "sensor:tank1/a_level"
+                    type: "int16"
+                  - offset: 1
+                    oid: "sensor:tank1/a_volume"
+                    type: "int16"
+              - count: 2
+                reg: "h20"
+                map:
+                  - offset: 0
+                    oid: "sensor:tank2/a_level"
+                    type: "int16"
+                  - offset: 1
+                    oid: "sensor:tank2/a_volume"
+                    type: "int16"
+              - count: 5
+                reg: "c0"
+                map:
+                  - offset: 0
+                    oid: "sensor:tank1/top_level"
+                  - offset: 1
+                    oid: "sensor:tank1/bottom_level"
+                  - offset: 2
+                    oid: "unit:tank1/valve1"
+                  - offset: 3
+                    oid: "unit:tank1/valve2"
+                  - offset: 4
+                    oid: "unit:tank1/pump"
+              - count: 5
+                reg: "c20"
+                map:
+                  - offset: 0
+                    oid: "sensor:tank2/top_level"
+                  - offset: 1
+                    oid: "sensor:tank2/bottom_level"
+                  - offset: 2
+                    oid: "unit:tank2/valve1"
+                  - offset: 3
+                    oid: "unit:tank2/valve2"
+                  - offset: 4
+                    oid: "unit:tank2/pump"
+            action_map:
+              unit:tank1/pump:
+                reg: "c4"
+              unit:tank1/valve1:
+                reg: "c2"
+              unit:tank1/valve2:
+                reg: "c3"
+              unit:tank2/pump:
+                reg: "c24"
+              unit:tank2/valve1:
+                reg: "c22"
+              unit:tank2/valve2:
+                reg: "c23"

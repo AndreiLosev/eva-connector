@@ -12,7 +12,13 @@ class Action implements Serializable {
       throw OidIsEmptyExeption();
     }
 
-    return {"stv": svc, "timeout": timeout, "config": config};
+    return Map.fromEntries(
+      [
+        MapEntry("svc", svc),
+        MapEntry("timeout", timeout),
+        MapEntry("config", config),
+      ].where((e) => e.value != null),
+    );
   }
 
   @override

@@ -1,7 +1,8 @@
 import 'package:eva_connector/src/eva-config/serializable.dart';
 import 'package:eva_connector/src/eva-config/svcs/bus.dart';
+import 'package:eva_connector/src/eva-config/svcs/isvc_config.dart';
 
-class BaseSvc<T extends Serializable> implements Serializable {
+class BaseSvc<T extends ISvcConfig> implements Serializable {
   String oid;
   final bus = Bus();
 
@@ -20,29 +21,32 @@ class BaseSvc<T extends Serializable> implements Serializable {
     startup: 10.0,
   );
 
-  T? config;
+  T config;
 
-  BaseSvc(this.oid, this.command);
+  BaseSvc(this.oid, this.command, this.config);
 
   @override
   Map<String, dynamic> toMap() {
     return {
-      'bus': bus.toMap(),
-      'call_tracing': callTracing,
-      'command': command,
-      'user': user,
-      'workers': workers,
-      'enabled': enabled,
-      'launcher': launcher,
-      'mem_warn': memWarn,
-      'prepare_command': prepareCommand,
-      'react_to_fail': reactToFail,
-      'timeout': {
-        'default': timeout.default1,
-        'shutdown': timeout.shutdown,
-        'startup': timeout.startup,
+      'id': oid,
+      'params': {
+        'bus': bus.toMap(),
+        'call_tracing': callTracing,
+        'command': command,
+        'user': user,
+        'workers': workers,
+        'enabled': enabled,
+        'launcher': launcher,
+        'mem_warn': memWarn,
+        'prepare_command': prepareCommand,
+        'react_to_fail': reactToFail,
+        'timeout': {
+          'default': timeout.default1,
+          'shutdown': timeout.shutdown,
+          'startup': timeout.startup,
+        },
+        'config': config.toMapEmpty(),
       },
-      'config': config?.toMap(),
     };
   }
 
@@ -63,6 +67,6 @@ class BaseSvc<T extends Serializable> implements Serializable {
       shutdown: map['timeout']['shutdown'],
       startup: map['timeout']['startup'],
     );
-    config?.loadFromMap(map['config']);
+    config.loadFromMapEmpty(map['config']);
   }
 }

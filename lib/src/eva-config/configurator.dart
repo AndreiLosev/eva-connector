@@ -1,6 +1,9 @@
-import 'package:eva_connector/src/config.dart';
+import 'dart:io';
+
+import 'package:eva_connector/src/Configs/config.dart';
 import 'package:eva_connector/src/eva-config/items/item.dart';
 import 'package:eva_connector/src/eva-config/svcs/base_svc.dart';
+import 'package:eva_connector/src/exceptions/unsupported_service.dart';
 import 'package:eva_connector/src/rpc/eva_client.dart';
 import 'package:yaml_writer/yaml_writer.dart';
 
@@ -14,6 +17,7 @@ class Configurator {
   Future<void> pullAll() async {
     final items = await pullItems('*');
     final svcs = await pullSvcs();
+
     makeConfig(items, svcs);
   }
 
@@ -34,8 +38,12 @@ class Configurator {
     final oids = svcs.map((e) => e.id).toList();
     final configs = <BaseSvc>[];
     for (var oid in oids) {
-      final itemConfig = await _client.getSvcParam(oid);
-      configs.add(itemConfig);
+      try {
+        final itemConfig = await _client.getSvcParam(oid);
+        configs.add(itemConfig);
+      } on UnsupportedService {
+        continue;
+      }
     }
 
     return configs;
@@ -47,12 +55,13 @@ class Configurator {
       "content": [
         {
           "node": ".local",
-          "items": items.map((e) => e.toMap()),
-          "svcs": svcs.map((e) => e.toMap()),
+          "items": items.map((e) => e.toMap()).toList(),
+          "svcs": svcs.map((e) => e.toMap()).toList(),
         },
       ],
     };
 
-    print(_yamlWriter.write(map));
+    final yaml = _yamlWriter.write(map);
+    await File("${_config.projectDir}/eva-conf.yaml").writeAsString(yaml);
   }
 }
