@@ -1,12 +1,14 @@
 import 'package:eva_connector/src/eva-config/items/item.dart';
 import 'package:eva_connector/src/eva-config/svcs/base_svc.dart';
 import 'package:eva_connector/src/eva-config/svcs/modbus_controller/modbus_controller.dart';
+import 'package:eva_connector/src/eva-config/svcs/s7_controller/s7_controller.dart';
 import 'package:eva_connector/src/exceptions/unsupported_service.dart';
 
 class Factory {
   BaseSvc makeSvc(String oid, Map map) {
-    final svc = switch (map['command']) {
+    final BaseSvc svc = switch (map['command']) {
       ModbusController.svcCommand => ModbusController(oid),
+      S7Controller.svcCommand => S7Controller(oid),
       _ => throw UnsupportedService(map['command']),
     };
 

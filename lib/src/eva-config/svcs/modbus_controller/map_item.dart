@@ -53,7 +53,8 @@ class MapItem {
       return (mOffset, null);
     }
 
-    if (mOffset is String) {
+    if (mOffset is String &&
+        RegExp("^[0-9]+/[0-9]+\$").firstMatch(mOffset) != null) {
       final arr = mOffset.split('/');
       return (int.parse(arr.first), int.parse(arr.last));
     }

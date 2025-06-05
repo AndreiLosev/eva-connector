@@ -5,7 +5,7 @@ import 'package:eva_connector/src/eva-config/svcs/modbus_controller/enums.dart';
 import 'package:eva_connector/src/eva-config/svcs/modbus_controller/map_item.dart';
 import 'package:eva_connector/src/eva-config/svcs/modbus_controller/modbus_register.dart';
 
-class ModbusConfig extends ISvcConfig implements Serializable {
+class ModbusConfig extends ISvcConfig {
   int actionQueueSize = 32;
   bool actionsVerify = true;
   ({String path, ModbusProtocol protocol, int unit}) modbus = (
