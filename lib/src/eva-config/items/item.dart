@@ -1,6 +1,5 @@
 import 'package:eva_connector/src/eva-config/items/action.dart';
 import 'package:eva_connector/src/eva-config/serializable.dart';
-import 'package:eva_connector/src/exceptions/oid_is_empty_exeption.dart';
 
 sealed class Item implements Serializable {
   bool enabled = true;
@@ -10,10 +9,6 @@ sealed class Item implements Serializable {
 
   @override
   Map<String, dynamic> toMap() {
-    if (oid.isEmpty) {
-      throw OidIsEmptyExeption();
-    }
-
     return {"enabled": enabled, "oid": oid};
   }
 
@@ -34,7 +29,7 @@ class Lvar extends Item {
   Lvar(super.oid);
 }
 
-class Unit extends Item {
+class Unit extends Item with MakeAction {
   static const name = 'unit';
   Action? action;
 
@@ -51,39 +46,26 @@ class Unit extends Item {
   @override
   void loadFromMap(Map map) {
     super.loadFromMap(map);
-    if (map['action'] == null) {}
-    action = makeAction(map['action']);
-  }
-
-  Action? makeAction(Map? map) {
-    if (map == null) {
-      return null;
+    if (map['action'] == null) {
+      return;
     }
-
-    final a = Action();
-    a.loadFromMap(map);
-
-    return a;
+    action = makeAction(map['action']);
   }
 }
 
-class Lmacro extends Item {
+class Lmacro extends Unit with MakeAction {
   static const name = 'lmacro';
-  Action? action;
-
   Lmacro(super.oid);
+}
 
-  @override
-  Map<String, dynamic> toMap() {
-    final res = super.toMap();
-    res['action'] = action?.toMap();
+mixin MakeAction {
+  Action? makeAction(Map? map) {
+    if (map == null || map['svc'] is! String) {
+      return null;
+    }
 
-    return res;
-  }
-
-  @override
-  void loadFromMap(Map map) {
-    super.loadFromMap(map);
-    action = map['action'];
+    final a = Action(map['svc']);
+    a.loadFromMap(map);
+    return a;
   }
 }

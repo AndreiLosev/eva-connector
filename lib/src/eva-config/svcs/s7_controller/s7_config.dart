@@ -1,5 +1,7 @@
 import 'package:eva_connector/src/eva-config/svcs/isvc_config.dart';
+import 'package:eva_connector/src/eva-config/svcs/s7_controller/action_map.dart';
 import 'package:eva_connector/src/eva-config/svcs/s7_controller/enums.dart';
+import 'package:eva_connector/src/eva-config/svcs/s7_controller/pull_config.dart';
 
 class S7Config extends ISvcConfig {
   String ip = "127.0.0.1";
@@ -43,62 +45,6 @@ class S7Config extends ISvcConfig {
   }
 }
 
-class PullConfig {
-  S7Area area = DataBlock(1);
-  bool singleRequest = false;
-  List<OffsetMap> map = [];
-
-  static PullConfig fromMap(Map map) {
-    final res = PullConfig();
-    res.area = S7Area.fromString(map['area']);
-    res.singleRequest = map['single_request'];
-    res.map = (map['map'] as List).map((e) => OffsetMap.fromMap(e)).toList();
-
-    return res;
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'area': area,
-      'single_request': singleRequest,
-      'map': map.map((e) => e.toMap()).toList(),
-    };
-  }
-}
-
-class OffsetMap {
-  (int, int?) offset = (1, null);
-  String oid;
-  S7Type? type;
-  double? valueDelta;
-  List<Transform>? transform;
-
-  OffsetMap(this.oid);
-
-  static OffsetMap fromMap(Map map) {
-    final res = OffsetMap(map['oid']);
-    res.offset = parseOffset(map['offset']);
-    res.type = S7Type.fromString(map['type']);
-    res.valueDelta = map['value_delta']?.toDouble();
-    res.transform = map['transform'] != null
-        ? (map['transform'] as List).map((e) => Transform.fromMap(e)).toList()
-        : null;
-
-    return res;
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'offset': offset.$2 == null ? offset.$1 : "${offset.$1}/${offset.$2}",
-      'oid': oid,
-      if (type != null) 'type': type,
-      if (valueDelta != null) 'value_delta': valueDelta,
-      if (transform != null)
-        'transform': transform!.map((e) => e.toMap()).toList(),
-    };
-  }
-}
-
 class Transform {
   TransformFunc func;
   List<dynamic> params;
@@ -114,30 +60,5 @@ class Transform {
 
   Map<String, dynamic> toMap() {
     return {'func': func.name, 'params': params};
-  }
-}
-
-class ActionMap {
-  S7Area area = DataBlock(1);
-  (int, int?) offset = (1, null);
-  S7Type? type;
-
-  ActionMap();
-
-  static ActionMap fromMap(Map map) {
-    final res = ActionMap();
-    res.area = S7Area.fromString(map['area']);
-    res.offset = parseOffset(map['offset']);
-    res.type = S7Type.fromString(map['type']);
-
-    return res;
-  }
-
-  Map<String, dynamic> toMap() {
-    final res = {'area': area, 'offset': offset};
-    if (type != null) {
-      res['type'] = type!;
-    }
-    return res;
   }
 }
