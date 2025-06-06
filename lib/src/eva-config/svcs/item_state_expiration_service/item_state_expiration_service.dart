@@ -3,9 +3,9 @@ import 'package:eva_connector/src/eva-config/svcs/item_state_expiration_service/
 
 class ItemStateExpirationService extends BaseSvc<ItemStateExpirationConfig> {
   static const svcCommand = "svc/eva-svc-expiration";
-  ItemStateExpirationService(String oid)
+  ItemStateExpirationService(String id)
     : super(
-        oid,
+        id,
         ItemStateExpirationService.svcCommand,
         ItemStateExpirationConfig(),
       );

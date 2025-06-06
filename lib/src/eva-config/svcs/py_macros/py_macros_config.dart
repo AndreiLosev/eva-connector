@@ -17,8 +17,8 @@ class PyMacrosConfig extends ISvcConfig {
   @override
   Map<String, dynamic> toMap() {
     return {
-      'lockerSvc': lockerSvc,
-      'mailerSvc': mailerSvc,
+      if (lockerSvc != null) 'lockerSvc': lockerSvc,
+      if (mailerSvc != null) 'mailerSvc': mailerSvc,
       'macroDir': macroDir,
       'cvars': cvars,
     };

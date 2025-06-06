@@ -14,7 +14,7 @@ sealed class Item implements Serializable {
 
   @override
   void loadFromMap(Map map) {
-    enabled = map['enabled'];
+    enabled = map['enabled'] ?? false;
     oid = map['oid'];
   }
 }

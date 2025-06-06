@@ -4,6 +4,6 @@ import 'package:eva_connector/src/eva-config/svcs/modbus_controller/modbus_confi
 class ModbusController extends BaseSvc<ModbusConfig> {
   static const svcCommand = "svc/eva-controller-modbus";
 
-  ModbusController(String oid)
-    : super(oid, ModbusController.svcCommand, ModbusConfig());
+  ModbusController(String id)
+    : super(id, ModbusController.svcCommand, ModbusConfig());
 }

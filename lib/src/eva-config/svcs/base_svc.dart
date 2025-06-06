@@ -3,7 +3,7 @@ import 'package:eva_connector/src/eva-config/svcs/bus.dart';
 import 'package:eva_connector/src/eva-config/svcs/isvc_config.dart';
 
 class BaseSvc<T extends ISvcConfig> implements Serializable {
-  String oid;
+  String id;
   final bus = Bus();
 
   bool callTracing = false;
@@ -23,12 +23,12 @@ class BaseSvc<T extends ISvcConfig> implements Serializable {
 
   T config;
 
-  BaseSvc(this.oid, this.command, this.config);
+  BaseSvc(this.id, this.command, this.config);
 
   @override
   Map<String, dynamic> toMap() {
     return {
-      'id': oid,
+      'id': id,
       'params': {
         'bus': bus.toMap(),
         'call_tracing': callTracing,

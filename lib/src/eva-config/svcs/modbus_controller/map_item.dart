@@ -9,7 +9,7 @@ class MapItem {
 
   MapItem(this.oid);
 
-  Map<String, dynamic> toMap() {
+  Map toMap() {
     return Map.fromEntries(
       [
         MapEntry(

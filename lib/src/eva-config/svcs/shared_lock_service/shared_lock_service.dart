@@ -4,6 +4,6 @@ import 'package:eva_connector/src/eva-config/svcs/shared_lock_service/shared_loc
 class SharedLockService extends BaseSvc<SharedLockConfig> {
   static const svcCommand = "svc/eva-svc-locker";
 
-  SharedLockService(String oid)
-    : super(oid, SharedLockService.svcCommand, SharedLockConfig());
+  SharedLockService(String id)
+    : super(id, SharedLockService.svcCommand, SharedLockConfig());
 }

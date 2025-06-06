@@ -10,4 +10,8 @@ abstract interface class CanDoRpc {
   });
 
   Future<OpResult> rpcCall0(String target, String method, {Uint8List? params});
+
+  Future coreCall(String method, [Object? params]);
+
+  Future coreCall0(String method, [Object? params]);
 }

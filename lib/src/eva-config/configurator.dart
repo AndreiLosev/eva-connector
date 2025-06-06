@@ -8,7 +8,7 @@ import 'package:eva_connector/src/rpc/eva_client.dart';
 import 'package:yaml_writer/yaml_writer.dart';
 
 class Configurator {
-  final EvaClient _client;
+  final RpcClient _client;
   final Config _config;
   final YamlWriter _yamlWriter;
 

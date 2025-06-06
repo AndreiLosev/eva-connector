@@ -3,5 +3,5 @@ import 'package:eva_connector/src/eva-config/svcs/py_macros/py_macros_config.dar
 
 class PyMacros extends BaseSvc<PyMacrosConfig> {
   static const svcCommand = "venv/bin/eva4-svc-controller-py";
-  PyMacros(String oid) : super(oid, PyMacros.svcCommand, PyMacrosConfig());
+  PyMacros(String id) : super(id, PyMacros.svcCommand, PyMacrosConfig());
 }

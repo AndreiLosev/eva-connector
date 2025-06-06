@@ -10,7 +10,7 @@ void main(List<String> args) async {
   final bus = Bus(config.ideName);
   await bus.connect(config.evaSoket);
   final rpc = Rpc(bus);
-  final c = EvaClient(rpc, Factory());
+  final c = RpcClient(rpc, Factory());
   final configurator = Configurator(c, config, YamlWriter());
   await configurator.pullAll();
   bus.disconnect();
