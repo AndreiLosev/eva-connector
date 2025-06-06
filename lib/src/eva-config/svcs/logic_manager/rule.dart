@@ -2,8 +2,8 @@ import 'package:eva_connector/src/eva-config/svcs/logic_manager/condition.dart';
 
 class Rule {
   String id;
-  String oid = '';
-  Prop prop = Prop.status;
+  String oid;
+  Prop prop = Prop.value;
   Condition condition = Condition();
   bool? breakOnMatch = false;
   int? chilloutTime = 0;
@@ -14,7 +14,7 @@ class Rule {
   List<dynamic>? args = [];
   Map<String, dynamic>? kwargs = {};
 
-  Rule(this.id, this.run);
+  Rule(this.id, this.run, this.oid);
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{};
@@ -44,7 +44,7 @@ class Rule {
   void loadFromMap(Map<String, dynamic> map) {
     id = map['id'];
     oid = map['oid'];
-    prop = Prop.fromString(map['prop']);
+    prop = Prop.fromString(map['prop'] ?? prop.name);
     condition.loadFromMap(map['condition']);
     breakOnMatch = map['break'];
     chilloutTime = map['chillout_time'];

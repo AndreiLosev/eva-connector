@@ -19,7 +19,10 @@ class Condition {
     };
   }
 
-  void loadFromMap(Map<String, dynamic> map) {
+  void loadFromMap(Map<String, dynamic>? map) {
+    if (map == null) {
+      return;
+    }
     if (map.containsKey('expression')) {
       expression = map['expression'] as String?;
     } else {

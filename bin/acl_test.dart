@@ -8,13 +8,17 @@ void main(List<String> args) async {
   await bus.connect(c.evaSoket);
   final rpc = Rpc(bus);
 
-  final keyList = await getKeyList(rpc);
-  keyList.forEach(print);
+  final res = await getKeyList(rpc);
+  print(res);
   bus.disconnect();
 }
 
-Future<List<dynamic>> getKeyList(Rpc rpc) async {
-  final rpcRes = await rpc.call('eva.aaa.localauth', 'key.list');
+Future getKeyList(Rpc rpc) async {
+  final rpcRes = await rpc.call(
+    'eva.core',
+    'run',
+    params: serialize({'i': 'lmacro:test/first1'}),
+  );
 
   final frame = await rpcRes.waitCompleted();
 
@@ -22,5 +26,5 @@ Future<List<dynamic>> getKeyList(Rpc rpc) async {
     throw Exception("Failed to retrieve key list");
   }
 
-  return deserialize(frame.payload) as List<dynamic>;
+  return deserialize(frame.payload);
 }
