@@ -149,3 +149,29 @@ content:
                 reg: "c22"
               unit:tank2/valve2:
                 reg: "c23"
+      - id: "eva.controller.py"
+        params:
+          bus:
+            buf_size: 8192
+            buf_ttl: 10
+            path: "var/bus.ipc"
+            queue_size: 8192
+            timout: null
+            type: "native"
+          call_tracing: false
+          command: "venv/bin/eva4-svc-controller-py"
+          user: "nobody"
+          workers: 1
+          enabled: true
+          launcher: "eva.launcher.main"
+          mem_warn: 134217728
+          prepare_command: null
+          react_to_fail: false
+          timeout:
+            default: null
+            shutdown: null
+            startup: null
+          config:
+            macroDir: "xc/py"
+            cvars:
+              var1: 555
