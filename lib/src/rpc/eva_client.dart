@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:busrt_client/busrt_client.dart';
 import 'package:eva_connector/src/eva-config/factory.dart';
+import 'package:eva_connector/src/rpc/by_industry/file_client.dart';
 import 'package:eva_connector/src/rpc/by_industry/item_client.dart';
 import 'package:eva_connector/src/rpc/by_industry/log_client.dart';
 import 'package:eva_connector/src/rpc/by_industry/svc_client.dart';
@@ -9,7 +10,8 @@ import 'package:eva_connector/src/rpc/can_do_configuration.dart';
 import 'package:eva_connector/src/rpc/can_do_rpc.dart';
 import 'package:msgpack_dart/msgpack_dart.dart';
 
-class RpcClient extends _BaseClient with ItemClient, SvcClient, LogClient {
+class RpcClient extends _BaseClient
+    with ItemClient, SvcClient, LogClient, FileClient {
   RpcClient(super._rpc, super._factory);
 }
 
