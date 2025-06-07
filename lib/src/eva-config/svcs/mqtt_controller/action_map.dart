@@ -1,5 +1,5 @@
 import 'package:eva_connector/src/eva-config/serializable.dart';
-import 'package:eva_connector/src/eva-config/svcs/modbus_controller/action_map_item.dart';
+import 'package:eva_connector/src/eva-config/svcs/mqtt_controller/action_map_item.dart';
 
 class ActionMap implements Serializable {
   String topic = 'test/test';
