@@ -8,7 +8,7 @@ void main(List<String> args) async {
   final bus = Bus(config.ideName);
   await bus.connect(config.evaSoket);
   final rpc = Rpc(bus);
-  final r = await rpc.call(id, 'sh', params: serialize({'c': 'sbin/cpu-temp'}));
+  final r = await rpc.call(id, 'sh', params: serialize({'c': 'ls'}));
   final f = await r.waitCompleted();
 
   if (f == null) {

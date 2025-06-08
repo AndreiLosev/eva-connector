@@ -1,4 +1,6 @@
 import 'package:eva_connector/src/rpc/can_do_rpc.dart';
+import 'package:eva_connector/src/rpc/responses/file_list_item_response.dart';
+import 'package:eva_connector/src/rpc/responses/file_sh_response.dart';
 import 'package:msgpack_dart/msgpack_dart.dart';
 
 mixin FileClient on CanDoRpc {
@@ -28,32 +30,38 @@ mixin FileClient on CanDoRpc {
     await baseCall0('file.unlink', {'path': path});
   }
 
-  Future<List<String>> list([
+  Future<List<FileListItemResponse>> list([
     String path = '.',
     String? masks,
     String? kind,
     bool recursive = false,
   ]) async {
-    return await baseCall('list', {
+    final rawResposne = await baseCall('list', {
       'path': path,
       'masks': masks,
       'kind': kind,
       'recursive': recursive,
     });
+
+    return (rawResposne as List)
+        .map((e) => FileListItemResponse.fromMap(e))
+        .toList();
   }
 
-  Future<String> sh(
+  Future<FileShResponse> sh(
     String c, [
     double? timeout,
     String? stdin,
     bool checkExitCode = false,
   ]) async {
-    return await baseCall('sh', {
+    final raw = await baseCall('sh', {
       'c': c,
       'timeout': timeout,
       'stdin': stdin,
       'check_exit_code': checkExitCode,
     });
+
+    return FileShResponse.fromMap(raw);
   }
 
   Future<void> baseCall0(String method, [Map? params]) async {
