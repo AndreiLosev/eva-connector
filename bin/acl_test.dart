@@ -9,15 +9,15 @@ void main(List<String> args) async {
   final rpc = Rpc(bus);
 
   final res = await getKeyList(rpc);
-  print(res);
+  (res as List).forEach(print);
   bus.disconnect();
 }
 
 Future getKeyList(Rpc rpc) async {
   final rpcRes = await rpc.call(
-    'eva.core',
-    'run',
-    params: serialize({'i': 'lmacro:test/first1'}),
+    'eva.aaa.localauth',
+    'key.list',
+    //params: serialize({'i': 'lmacro:test/first1'}),
   );
 
   final frame = await rpcRes.waitCompleted();
