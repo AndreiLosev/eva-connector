@@ -9,10 +9,9 @@ import 'package:yaml_writer/yaml_writer.dart';
 
 class Configurator {
   final RpcClient _client;
-  final Config _config;
   final YamlWriter _yamlWriter;
 
-  Configurator(this._client, this._config, this._yamlWriter);
+  Configurator(this._client, this._yamlWriter);
 
   Future<void> pullAll() async {
     final items = await pullItems('*');
@@ -49,7 +48,7 @@ class Configurator {
     return configs;
   }
 
-  void makeConfig(List<Item> items, List<BaseSvc> svcs) async {
+  Future<String> makeConfig(List<Item> items, List<BaseSvc> svcs) async {
     final map = {
       "version": 4,
       "content": [
@@ -61,7 +60,6 @@ class Configurator {
       ],
     };
 
-    final yaml = _yamlWriter.write(map);
-    await File("${_config.projectDir}/eva-conf.yaml").writeAsString(yaml);
+    return _yamlWriter.write(map);
   }
 }
