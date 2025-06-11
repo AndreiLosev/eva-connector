@@ -1,6 +1,6 @@
-import 'package:eva_connector/src/eva-config/serializable.dart';
 import 'package:eva_connector/src/eva-config/svcs/isvc_config.dart';
 import 'package:eva_connector/src/eva-config/svcs/script_runner_controller/action_map.dart';
+import 'package:eva_connector/src/eva-config/svcs/script_runner_controller/update_command.dart';
 import 'package:eva_connector/src/eva-config/svcs/script_runner_controller/update_pipe.dart';
 
 class ScriptRunnerConfig extends ISvcConfig {
