@@ -21,5 +21,6 @@ export 'package:eva_connector/src/eva-config/svcs/modbus_controller/modbus_contr
 export 'package:eva_connector/src/eva-config/svcs/shared_lock_service/shared_lock_service.dart';
 export 'package:eva_connector/src/eva-config/svcs/script_runner_controller/script_runner_controller.dart';
 export 'package:eva_connector/src/eva-config/svcs/item_state_expiration_service/item_state_expiration_service.dart';
+export 'package:eva_connector/src/rpc/responses/test_response.dart';
 export 'package:yaml_writer/yaml_writer.dart';
 export 'package:yaml/yaml.dart';

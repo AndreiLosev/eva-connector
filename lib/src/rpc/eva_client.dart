@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:busrt_client/busrt_client.dart';
+import 'package:eva_connector/eva_connector.dart';
 import 'package:eva_connector/src/eva-config/factory.dart';
 import 'package:eva_connector/src/rpc/by_industry/file_client.dart';
 import 'package:eva_connector/src/rpc/by_industry/item_client.dart';
@@ -8,15 +8,30 @@ import 'package:eva_connector/src/rpc/by_industry/log_client.dart';
 import 'package:eva_connector/src/rpc/by_industry/svc_client.dart';
 import 'package:eva_connector/src/rpc/can_do_configuration.dart';
 import 'package:eva_connector/src/rpc/can_do_rpc.dart';
+import 'package:eva_connector/src/rpc/responses/test_response.dart';
 import 'package:msgpack_dart/msgpack_dart.dart';
+import 'package:busrt_client/busrt_client.dart' as busrt;
 
 class RpcClient extends _BaseClient
     with ItemClient, SvcClient, LogClient, FileClient {
-  RpcClient(super._rpc, super._factory);
+  final Config config;
+
+  RpcClient(super._rpc, super._factory, this.config);
+
+  factory RpcClient.short(Config config) {
+    final bus = busrt.Bus(config.ideName);
+    final rpc = busrt.Rpc(bus);
+
+    return RpcClient(rpc, Factory(), config);
+  }
+
+  Future<void> connect() async {
+    _rpc.bus.connect(config.evaSoket);
+  }
 }
 
 class _BaseClient implements CanDoRpc, CanDoConfiguration {
-  final Rpc _rpc;
+  final busrt.Rpc _rpc;
   final Factory _factory;
 
   @override
@@ -25,14 +40,14 @@ class _BaseClient implements CanDoRpc, CanDoConfiguration {
   _BaseClient(this._rpc, this._factory);
 
   @override
-  Future<RpcOpResult> rpcCall(
+  Future<busrt.RpcOpResult> rpcCall(
     String target,
     String method, {
     Uint8List? params,
   }) => _rpc.call(target, method, params: params);
 
   @override
-  Future<OpResult> rpcCall0(
+  Future<busrt.OpResult> rpcCall0(
     String target,
     String method, {
     Uint8List? params,
@@ -60,5 +75,10 @@ class _BaseClient implements CanDoRpc, CanDoConfiguration {
     );
 
     await response.waitCompleted();
+  }
+
+  Future<TestResponse> test() async {
+    final rawRes = await coreCall('test');
+    return TestResponse.fromMap(rawRes);
   }
 }
