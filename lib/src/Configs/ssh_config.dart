@@ -19,7 +19,7 @@ class SshConfig {
     };
   }
 
-  factory SshConfig.fromMap(Map<String, dynamic> map) {
+  factory SshConfig.fromMap(Map map) {
     return SshConfig()
       ..user = map['user']
       ..host = map['host']
