@@ -14,9 +14,14 @@ class Config {
   }
 
   factory Config.froMap(Map map) {
-    return Config()
+    final c = Config()
       ..ideName = map['ide_name']
-      ..evaSoket = map['eva_soket']
-      ..ssh = SshConfig.fromMap(map['ssh']);
+      ..evaSoket = map['eva_soket'];
+
+    if (map['ssh'] != null) {
+      c.ssh = SshConfig.fromMap(map['ssh']);
+    }
+
+    return c;
   }
 }
