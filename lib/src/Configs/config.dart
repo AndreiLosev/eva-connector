@@ -24,4 +24,13 @@ class Config {
 
     return c;
   }
+
+  void loadFromMap(Map map) {
+    ideName = map['ideName'];
+    evaSoket = map['eva_soket'];
+
+    if (map['ssh'] != null) {
+      ssh = SshConfig.fromMap(map['ssh']);
+    }
+  }
 }
