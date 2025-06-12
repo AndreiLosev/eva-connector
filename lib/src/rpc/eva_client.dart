@@ -8,7 +8,6 @@ import 'package:eva_connector/src/rpc/by_industry/log_client.dart';
 import 'package:eva_connector/src/rpc/by_industry/svc_client.dart';
 import 'package:eva_connector/src/rpc/can_do_configuration.dart';
 import 'package:eva_connector/src/rpc/can_do_rpc.dart';
-import 'package:eva_connector/src/rpc/responses/test_response.dart';
 import 'package:msgpack_dart/msgpack_dart.dart';
 import 'package:busrt_client/busrt_client.dart' as busrt;
 
@@ -25,9 +24,9 @@ class RpcClient extends _BaseClient
     return RpcClient(rpc, Factory(), config);
   }
 
-  Future<void> connect() async {
-    _rpc.bus.connect(config.evaSoket);
-  }
+  Future<void> connect() => _rpc.bus.connect(config.evaSoket);
+
+  Future<void> disconnect() => _rpc.bus.disconnect();
 }
 
 class _BaseClient implements CanDoRpc, CanDoConfiguration {
