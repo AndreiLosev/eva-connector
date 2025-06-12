@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:eva_connector/src/Configs/config.dart';
 import 'package:eva_connector/src/eva-config/items/item.dart';
 import 'package:eva_connector/src/eva-config/svcs/base_svc.dart';
 import 'package:eva_connector/src/exceptions/unsupported_service.dart';

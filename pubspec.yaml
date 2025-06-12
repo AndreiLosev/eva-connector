@@ -1,6 +1,6 @@
 name: eva_connector
 description: A sample command-line application.
-version: 0.0.2
+version: 0.0.3
 # repository: https://github.com/my_org/my_repo
 
 environment:
@@ -13,7 +13,6 @@ dependencies:
   dartssh2: ^2.12.0
   msgpack_dart: ^1.0.1
   busrt_client: ^0.4.0
-  # path: ^1.8.0
 
 dev_dependencies:
   lints: ^6.0.0
