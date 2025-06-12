@@ -26,7 +26,7 @@ class Config {
   }
 
   void loadFromMap(Map map) {
-    ideName = map['ideName'];
+    ideName = map['ide_name'];
     evaSoket = map['eva_soket'];
 
     if (map['ssh'] != null) {
