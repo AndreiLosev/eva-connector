@@ -1,7 +1,8 @@
 import 'package:eva_connector/src/rpc/can_do_rpc.dart';
+import 'package:eva_connector/src/rpc/responses/log_response_item.dart';
 
 mixin LogClient on CanDoRpc {
-  Future<Map> logGet({
+  Future<List<LogResponseItem>> logGet({
     int limit = 100,
     int? level,
     String? msg,
@@ -16,7 +17,9 @@ mixin LogClient on CanDoRpc {
       if (time != null) 'time': time,
     };
 
-    return await coreCall("log.get", params);
+    final rawRes = await coreCall("log.get", params);
+
+    return (rawRes as List).map((e) => LogResponseItem.fromMap(e)).toList();
   }
 
   Future<void> logPurge() async {
