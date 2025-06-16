@@ -44,4 +44,9 @@ class LogResponseItem {
       'th': th,
     };
   }
+
+  @override
+  String toString() {
+    return "$dt  $h  $mod  $lvl  $msg";
+  }
 }
