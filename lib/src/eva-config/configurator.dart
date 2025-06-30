@@ -5,37 +5,37 @@ import 'package:eva_connector/src/rpc/eva_client.dart';
 import 'package:yaml_writer/yaml_writer.dart';
 
 class Configurator {
-  final RpcClient _client;
   final YamlWriter _yamlWriter;
 
-  Configurator(this._client, this._yamlWriter);
+  Configurator(this._yamlWriter);
 
-  Future<void> pullAll() async {
-    final items = await pullItems('*');
-    final svcs = await pullSvcs();
-
+  Future<void> pullAll(RpcClient client) async {
+    await client.connect();
+    final items = await pullItems(client, '*');
+    final svcs = await pullSvcs(client);
+    await client.disconnect();
     makeConfig(items, svcs);
   }
 
-  Future<List<Item>> pullItems(String oidPattern) async {
-    final items = await _client.getItemState(oidPattern);
+  Future<List<Item>> pullItems(RpcClient client, String oidPattern) async {
+    final items = await client.getItemState(oidPattern);
     final oids = items.map((e) => e.oid).toList();
     final itemConfigs = <Item>[];
     for (var oid in oids) {
-      final itemConfig = await _client.getItemConfig(oid);
+      final itemConfig = await client.getItemConfig(oid);
       itemConfigs.add(itemConfig);
     }
 
     return itemConfigs;
   }
 
-  Future<List<BaseSvc>> pullSvcs() async {
-    final svcs = await _client.getSvcList();
+  Future<List<BaseSvc>> pullSvcs(RpcClient client) async {
+    final svcs = await client.getSvcList();
     final oids = svcs.map((e) => e.id).toList();
     final configs = <BaseSvc>[];
     for (var oid in oids) {
       try {
-        final itemConfig = await _client.getSvcParam(oid);
+        final itemConfig = await client.getSvcParam(oid);
         configs.add(itemConfig);
       } on UnsupportedService {
         continue;
