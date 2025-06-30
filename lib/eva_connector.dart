@@ -23,5 +23,6 @@ export 'package:eva_connector/src/eva-config/svcs/script_runner_controller/scrip
 export 'package:eva_connector/src/eva-config/svcs/item_state_expiration_service/item_state_expiration_service.dart';
 export 'package:eva_connector/src/rpc/responses/test_response.dart';
 export 'package:eva_connector/src/rpc/responses/log_response_item.dart';
+export 'package:eva_connector/src/eva-config/configurator.dart';
 export 'package:yaml_writer/yaml_writer.dart';
 export 'package:yaml/yaml.dart';

@@ -1,15 +1,32 @@
 void main(List<String> args) {
-  print(_getName('ScadaProject'));
-  print(_getName('Scada-Project'));
-  print(_getName('scada_project'));
-  print(_getName('скада_прожект'));
+  final filters = [fn1, fn2];
+  final x = ['wasa', 'pety', 'igor'];
+
+  print(x.where(fn1));
+  print(x.where(fn2));
+  print(x.where((e) => makeFilters(filters, e)));
 }
 
-Object _getName(String rawName) {
-  return rawName
-      .replaceAllMapped(RegExp("[A-Z,А-Я]"), (m) => " ${m[0]}")
-      .split(RegExp("(-|_| )"))
-      .where((e) => e.isNotEmpty)
-      .map((e) => "${e[0].toUpperCase()}${e.substring(1)}")
-      .join(" ");
+bool fn1(String x) {
+  return !x.startsWith('w');
+}
+
+bool fn2(String x) {
+  return !x.startsWith('p');
+}
+
+bool makeFilters(Iterable<bool Function(String)?> filters, String arr) {
+  bool res = true;
+  for (var fn in filters) {
+    if (fn == null) {
+      continue;
+    }
+    res = fn(arr);
+
+    if (!res) {
+      return false;
+    }
+  }
+
+  return res;
 }
