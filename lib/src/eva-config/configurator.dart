@@ -1,13 +1,20 @@
+import 'package:eva_connector/src/eva-config/factory.dart';
 import 'package:eva_connector/src/eva-config/items/item.dart';
 import 'package:eva_connector/src/eva-config/svcs/base_svc.dart';
 import 'package:eva_connector/src/exceptions/unsupported_service.dart';
 import 'package:eva_connector/src/rpc/eva_client.dart';
+import 'package:yaml/yaml.dart';
 import 'package:yaml_writer/yaml_writer.dart';
 
 class Configurator {
   final YamlWriter _yamlWriter;
+  final Factory _factory;
 
-  Configurator(this._yamlWriter);
+  Configurator(this._yamlWriter, this._factory);
+
+  factory Configurator.short() {
+    return Configurator(YamlWriter(), Factory());
+  }
 
   Future<void> pullAll(RpcClient client) async {
     await client.connect();
@@ -58,5 +65,12 @@ class Configurator {
     };
 
     return _yamlWriter.write(map);
+  }
+
+  List<Item> loadConfig(String yaml) {
+    final map = loadYaml(yaml);
+    return (map['content']['items'] as List)
+        .map((e) => _factory.makeItem(e))
+        .toList();
   }
 }
