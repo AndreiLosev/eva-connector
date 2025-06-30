@@ -45,7 +45,7 @@ class Configurator {
     return configs;
   }
 
-  Future<String> makeConfig(List<Item> items, List<BaseSvc> svcs) async {
+  String makeConfig(List<Item> items, List<BaseSvc> svcs) {
     final map = {
       "version": 4,
       "content": [
