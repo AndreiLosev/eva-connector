@@ -1,32 +1,17 @@
+import 'package:eva_connector/eva_connector.dart';
+
 void main(List<String> args) {
-  final filters = [fn1, fn2];
-  final x = ['wasa', 'pety', 'igor'];
+  final rx = RegExp(
+    "(${Sensor.name}|${Unit.name}|${Lvar.name}|${Lmacro.name}):",
+  );
 
-  print(x.where(fn1));
-  print(x.where(fn2));
-  print(x.where((e) => makeFilters(filters, e)));
-}
+  final x = "sensor:test/value/test";
+  final m = rx.matchAsPrefix(x);
 
-bool fn1(String x) {
-  return !x.startsWith('w');
-}
-
-bool fn2(String x) {
-  return !x.startsWith('p');
-}
-
-bool makeFilters(Iterable<bool Function(String)?> filters, String arr) {
-  bool res = true;
-  for (var fn in filters) {
-    if (fn == null) {
-      continue;
-    }
-    res = fn(arr);
-
-    if (!res) {
-      return false;
-    }
-  }
-
-  return res;
+  print([
+    x.substring(m![0]!.length),
+    m![0]!.substring(0, m[0]!.length - 1),
+    x.replaceFirst(rx, '').split('/'),
+    'wasa'.split('/'),
+  ]);
 }

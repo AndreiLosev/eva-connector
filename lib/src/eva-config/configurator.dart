@@ -69,7 +69,7 @@ class Configurator {
 
   List<Item> loadConfig(String yaml) {
     final map = loadYaml(yaml);
-    return (map['content']['items'] as List)
+    return (map['content'][0]['items'] as List)
         .map((e) => _factory.makeItem(e))
         .toList();
   }
