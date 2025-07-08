@@ -1,4 +1,3 @@
-import 'package:eva_connector/src/eva-config/serializable.dart';
 import 'package:eva_connector/src/eva-config/svcs/isvc_config.dart';
 import 'package:eva_connector/src/eva-config/svcs/modbus_controller/action_map_item.dart';
 import 'package:eva_connector/src/eva-config/svcs/modbus_controller/enums.dart';
