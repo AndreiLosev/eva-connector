@@ -31,6 +31,8 @@ export 'package:eva_connector/src/eva-config/svcs/script_runner_controller/scrip
 export 'package:eva_connector/src/eva-config/svcs/script_runner_controller/script_runner_config.dart';
 export 'package:eva_connector/src/eva-config/svcs/item_state_expiration_service/item_state_expiration_service.dart';
 export 'package:eva_connector/src/eva-config/svcs/item_state_expiration_service/item_state_expiration_config.dart';
+export 'package:eva_connector/src/eva-config/svcs/system_monitoring_service/system_monitoring_config.dart';
+export 'package:eva_connector/src/eva-config/svcs/system_monitoring_service/system_monitoring_service.dart';
 export 'package:eva_connector/src/rpc/responses/test_response.dart';
 export 'package:eva_connector/src/rpc/responses/log_response_item.dart';
 export 'package:eva_connector/src/eva-config/configurator.dart';

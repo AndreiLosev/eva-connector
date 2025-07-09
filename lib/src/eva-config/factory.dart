@@ -10,6 +10,7 @@ import 'package:eva_connector/src/eva-config/svcs/py_macros/py_macros.dart';
 import 'package:eva_connector/src/eva-config/svcs/s7_controller/s7_controller.dart';
 import 'package:eva_connector/src/eva-config/svcs/script_runner_controller/script_runner_controller.dart';
 import 'package:eva_connector/src/eva-config/svcs/shared_lock_service/shared_lock_service.dart';
+import 'package:eva_connector/src/eva-config/svcs/system_monitoring_service/system_monitoring_service.dart';
 import 'package:eva_connector/src/exceptions/unsupported_service.dart';
 
 class Factory {
@@ -25,6 +26,7 @@ class Factory {
       MqttController.svcCommand => MqttController(id),
       HmiService.svcCommand => HmiService(id),
       ScriptRunnerController.svcCommand => ScriptRunnerController(id),
+      SystemMonitoringService.svcCommand => SystemMonitoringService(id),
       _ => throw UnsupportedService(map['command']),
     };
 
