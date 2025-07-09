@@ -12,6 +12,7 @@ export 'package:eva_connector/src/eva-config/svcs/bus.dart';
 export 'package:eva_connector/src/eva-config/svcs/base_svc.dart';
 export 'package:eva_connector/src/eva-config/svcs/isvc_config.dart';
 export 'package:eva_connector/src/eva-config/svcs/db_sql/db_sql_history.dart';
+export 'package:eva_connector/src/eva-config/svcs/db_sql/db_sql_config.dart';
 export 'package:eva_connector/src/eva-config/svcs/py_macros/py_macros.dart';
 export 'package:eva_connector/src/eva-config/svcs/py_macros/py_macros_config.dart';
 export 'package:eva_connector/src/eva-config/svcs/hmi_service/hmi_service.dart';
