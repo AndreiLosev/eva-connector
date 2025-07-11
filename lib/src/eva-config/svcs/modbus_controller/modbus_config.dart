@@ -12,7 +12,7 @@ class ModbusConfig extends ISvcConfig {
     protocol: ModbusProtocol.tcp,
     unit: 1,
   );
-  String? panicIn;
+  int? panicIn;
   int pullCacheSec = 360;
   int pullInterval = 2;
   int queueSize = 32768;
