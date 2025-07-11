@@ -5,7 +5,7 @@ class Bus implements Serializable {
   int bufTtl = 10;
   String path = 'var/bus.ipc';
   int queueSize = 8192;
-  int? timout;
+  double? timout;
   String type = 'native';
 
   @override
