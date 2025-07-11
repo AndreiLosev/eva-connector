@@ -44,21 +44,3 @@ class S7Config extends ISvcConfig {
     };
   }
 }
-
-class Transform {
-  TransformFunc func;
-  List<dynamic> params;
-
-  Transform({required this.func, required this.params});
-
-  static Transform fromMap(Map map) {
-    return Transform(
-      func: TransformFunc.values.byName(map['func']),
-      params: map['params'] ?? [],
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {'func': func.name, 'params': params};
-  }
-}

@@ -17,14 +17,12 @@ export 'package:eva_connector/src/eva-config/svcs/py_macros/py_macros.dart';
 export 'package:eva_connector/src/eva-config/svcs/py_macros/py_macros_config.dart';
 export 'package:eva_connector/src/eva-config/svcs/hmi_service/hmi_service.dart';
 export 'package:eva_connector/src/eva-config/svcs/hmi_service/hmi_config.dart';
-export 'package:eva_connector/src/eva-config/svcs/s7_controller/s7_controller.dart';
-export 'package:eva_connector/src/eva-config/svcs/s7_controller/s7_config.dart';
+
 export 'package:eva_connector/src/eva-config/svcs/logic_manager/logic_manager.dart';
 export 'package:eva_connector/src/eva-config/svcs/logic_manager/logic_manager_config.dart';
 export 'package:eva_connector/src/eva-config/svcs/mqtt_controller/mqtt_controller.dart';
 export 'package:eva_connector/src/eva-config/svcs/mqtt_controller/mqtt_config.dart';
-export 'package:eva_connector/src/eva-config/svcs/modbus_controller/modbus_controller.dart';
-export 'package:eva_connector/src/eva-config/svcs/modbus_controller/modbus_config.dart';
+
 export 'package:eva_connector/src/eva-config/svcs/shared_lock_service/shared_lock_service.dart';
 export 'package:eva_connector/src/eva-config/svcs/shared_lock_service/shared_lock_config.dart';
 export 'package:eva_connector/src/eva-config/svcs/script_runner_controller/script_runner_controller.dart';
@@ -38,3 +36,6 @@ export 'package:eva_connector/src/rpc/responses/log_response_item.dart';
 export 'package:eva_connector/src/eva-config/configurator.dart';
 export 'package:yaml_writer/yaml_writer.dart';
 export 'package:yaml/yaml.dart';
+
+export 'package:eva_connector/src/eva-config/svcs/modbus_controller/export.dart';
+export 'package:eva_connector/src/eva-config/svcs/s7_controller/export.dart';
