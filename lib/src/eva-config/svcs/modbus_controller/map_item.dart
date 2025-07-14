@@ -4,7 +4,7 @@ class MapItem {
   (int, int?) offset = (0, null);
   String oid;
   ModbusValueType? type = ModbusValueType.uint16;
-  double? valueDelta = 0.5;
+  double? valueDelta = 0.1;
   List<({ModbusTrasformFunc func, List<int> params})>? transform;
 
   MapItem(this.oid);

@@ -42,7 +42,10 @@ class ModbusConfig extends ISvcConfig {
             (e) => Map.fromEntries(
               [
                 MapEntry('count', e.count),
-                MapEntry('unit', e.unit),
+                MapEntry(
+                  'unit',
+                  modbus.protocol == ModbusProtocol.rtu ? e.unit : null,
+                ),
                 MapEntry('reg', e.reg.toString()),
                 MapEntry('map', e.map.map((i) => i.toMap()).toList()),
               ].where((e) => e.value != null),
