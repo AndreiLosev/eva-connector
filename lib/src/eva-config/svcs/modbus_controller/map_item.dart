@@ -1,4 +1,5 @@
 import 'package:eva_connector/src/eva-config/svcs/modbus_controller/enums.dart';
+import 'package:eva_connector/src/eva-config/svcs/modbus_controller/modbus_register.dart';
 
 class MapItem {
   (int, int?) offset = (0, null);
@@ -9,16 +10,18 @@ class MapItem {
 
   MapItem(this.oid);
 
-  Map toMap() {
+  Map toMap([ModbusRegister? reg]) {
     return Map.fromEntries(
       [
         MapEntry(
           'offset',
           offset.$2 == null ? offset.$1 : "${offset.$1}/${offset.$2}",
         ),
+        if ([Holding, Input].contains(reg?.runtimeType))
+          MapEntry('type', type?.toString()),
         MapEntry('oid', oid),
-        MapEntry('type', type?.toString()),
-        MapEntry('value_delta', valueDelta),
+        if (type?.name.startsWith('real') ?? false)
+          MapEntry('value_delta', valueDelta),
         MapEntry(
           'transform',
           transform?.map(

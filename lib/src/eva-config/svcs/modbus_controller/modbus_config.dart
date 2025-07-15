@@ -1,8 +1,6 @@
 import 'package:eva_connector/src/eva-config/svcs/isvc_config.dart';
 import 'package:eva_connector/src/eva-config/svcs/modbus_controller/action_map_item.dart';
 import 'package:eva_connector/src/eva-config/svcs/modbus_controller/enums.dart';
-import 'package:eva_connector/src/eva-config/svcs/modbus_controller/map_item.dart';
-import 'package:eva_connector/src/eva-config/svcs/modbus_controller/modbus_register.dart';
 import 'package:eva_connector/src/eva-config/svcs/modbus_controller/pull_item.dart';
 
 class ModbusConfig extends ISvcConfig {
@@ -37,7 +35,7 @@ class ModbusConfig extends ISvcConfig {
       'pull_interval': pullInterval,
       'queue_size': queueSize,
       'retries': retries,
-      'pull': pull.map((e) => e).toList(),
+      'pull': pull.map((e) => e.toMap(modbus.protocol)).toList(),
       'action_map': actionMap.map((k, v) => MapEntry(k, v.toMap())),
     };
   }

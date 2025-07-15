@@ -8,12 +8,13 @@ class PullItem {
 
   PullItem();
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap([ModbusProtocol? protocol]) {
     return {
       'count': count,
       'reg': reg.toString(),
-      'map': map.map((i) => i.toMap()).toList(),
-      if (unit is int) 'unit': unit,
+      'map': map.map((i) => i.toMap(reg)).toList(),
+      if (unit is int && (ModbusProtocol.rtu == protocol || protocol == null))
+        'unit': unit,
     };
   }
 
