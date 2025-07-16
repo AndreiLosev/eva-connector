@@ -12,7 +12,7 @@ class ModbusConfig extends ISvcConfig {
     unit: 1,
   );
   int? panicIn;
-  int pullCacheSec = 360;
+  int pullCacheSec = 3600;
   int pullInterval = 2;
   int queueSize = 32768;
   int retries = 2;
