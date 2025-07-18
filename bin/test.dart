@@ -1,4 +1,5 @@
 void main(List<String> args) {
+  <int>[].fold(0, (a, b) => a + b);
   int x1 = 1;
   int? x2 = 2;
   double y1 = 1.1;
