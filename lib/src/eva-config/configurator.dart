@@ -73,8 +73,8 @@ class Configurator {
         .map((e) => _factory.makeItem(e))
         .toList();
 
-    final svcs = (map['content'][0]['items'] as List)
-        .map((e) => _factory.makeSvc(e.id, e.params))
+    final svcs = (map['content'][0]['svcs'] as List)
+        .map((e) => _factory.makeSvc(e['id'], e['params']))
         .toList();
 
     return (items, svcs);
