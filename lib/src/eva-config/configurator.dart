@@ -16,12 +16,12 @@ class Configurator {
     return Configurator(YamlWriter(), Factory());
   }
 
-  Future<void> pullAll(RpcClient client) async {
+  Future<(List<Item>, List<BaseSvc>)> pullAll(RpcClient client) async {
     await client.connect();
     final items = await pullItems(client, '*');
     final svcs = await pullSvcs(client);
     await client.disconnect();
-    makeConfig(items, svcs);
+    return (items, svcs);
   }
 
   Future<List<Item>> pullItems(RpcClient client, String oidPattern) async {
