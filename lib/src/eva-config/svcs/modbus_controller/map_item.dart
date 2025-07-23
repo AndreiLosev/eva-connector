@@ -19,7 +19,7 @@ class MapItem {
         'value_delta': valueDelta,
       if (transform != null)
         'transform': transform
-            ?.map((e) => {'func': e.func, 'params': e.params})
+            ?.map((e) => {'func': e.func.toString(), 'params': e.params})
             .toList(),
     };
   }
