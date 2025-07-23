@@ -11,25 +11,17 @@ class MapItem {
   MapItem(this.oid);
 
   Map toMap([ModbusRegister? reg]) {
-    return Map.fromEntries(
-      [
-        MapEntry(
-          'offset',
-          offset.$2 == null ? offset.$1 : "${offset.$1}/${offset.$2}",
-        ),
-        if ([Holding, Input].contains(reg?.runtimeType))
-          MapEntry('type', type?.toString()),
-        MapEntry('oid', oid),
-        if (type?.name.startsWith('real') ?? false)
-          MapEntry('value_delta', valueDelta),
-        MapEntry(
-          'transform',
-          transform?.map(
-            (e) => {'func': e.func.toString(), 'params': e.params},
-          ),
-        ),
-      ].where((e) => e.value != null),
-    );
+    return {
+      'offset': offset.$2 == null ? offset.$1 : "${offset.$1}/${offset.$2}",
+      if ([Holding, Input].contains(reg?.runtimeType)) 'type': type?.toString(),
+      'oid': oid,
+      if (valueDelta != null && (type?.name.startsWith('real') ?? false))
+        'value_delta': valueDelta,
+      if (transform != null)
+        'transform': transform
+            ?.map((e) => {'func': e.func, 'params': e.params})
+            .toList(),
+    };
   }
 
   static MapItem loadFromMap(Map map) {
