@@ -67,10 +67,16 @@ class Configurator {
     return _yamlWriter.write(map);
   }
 
-  List<Item> loadConfig(String yaml) {
+  (List<Item>, List<BaseSvc>) loadConfig(String yaml) {
     final map = loadYaml(yaml);
-    return (map['content'][0]['items'] as List)
+    final items = (map['content'][0]['items'] as List)
         .map((e) => _factory.makeItem(e))
         .toList();
+
+    final svcs = (map['content'][0]['items'] as List)
+        .map((e) => _factory.makeSvc(e.id, e.params))
+        .toList();
+
+    return (items, svcs);
   }
 }
