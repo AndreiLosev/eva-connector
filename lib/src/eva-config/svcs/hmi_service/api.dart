@@ -4,6 +4,8 @@ class Api implements Serializable {
   String proto = 'http';
   String listen = '0.0.0.0:7727';
   String? realIpHeader;
+  String? db;
+  String? apiFilter;
 
   Api();
 
@@ -13,13 +15,17 @@ class Api implements Serializable {
       'proto': proto,
       'listen': listen,
       if (realIpHeader != null) 'real_ip_header': realIpHeader,
+      if (db != null) 'db': db,
+      if (apiFilter != null) 'api_filter': apiFilter,
     };
   }
 
   @override
   void loadFromMap(Map map) {
-    proto = map['proto'] as String;
-    listen = map['listen'] as String;
-    realIpHeader = map['real_ip_header'] as String?;
+    proto = map['proto'];
+    listen = map['listen'];
+    realIpHeader = map['real_ip_header'];
+    db = map['db'];
+    apiFilter = map['api_filter'];
   }
 }

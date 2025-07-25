@@ -38,7 +38,9 @@ class Unit extends Item with MakeAction {
   @override
   Map<String, dynamic> toMap() {
     final res = super.toMap();
-    res['action'] = action?.toMap();
+    if (action != null) {
+      res['action'] = action?.toMap();
+    }
 
     return res;
   }
