@@ -5,8 +5,25 @@ class FileListItemResponse {
   FileListItemResponse(this.path, this.kind);
 
   factory FileListItemResponse.fromMap(Map map) {
-    return FileListItemResponse(map['path'], map['kind']);
+    return FileListItemResponse(map['path'], FileKind.fromString(map['kind']));
+  }
+
+  @override
+  String toString() {
+    final map = {'path': path, 'kind': kind};
+    return "$runtimeType($map)";
   }
 }
 
-enum FileKind { file, dir }
+enum FileKind {
+  file,
+  dir;
+
+  static FileKind fromString(String s) {
+    return switch (s) {
+      'file' => FileKind.file,
+      'dir' => FileKind.dir,
+      _ => throw Exception('undefinet FileKind type: $s'),
+    };
+  }
+}

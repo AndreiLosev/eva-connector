@@ -10,6 +10,11 @@ mixin ItemClient on CanDoRpc, CanDoConfiguration {
     return (rpcRes as List).map(ItemResponse.fromMap).toList();
   }
 
+  Future<List<ItemResponseItem>> getItmesList(String oidPattern) async {
+    final rpcRes = await coreCall('item.list', {'i': oidPattern});
+    return (rpcRes as List).map(ItemResponseItem.fromMap).toList();
+  }
+
   Future<Item> getItemConfig(String oid) async {
     InvalidOid.checkOid(oid);
     final rpcRes = await coreCall('item.get_config', {'i': oid});

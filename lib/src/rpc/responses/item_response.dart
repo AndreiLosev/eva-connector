@@ -42,3 +42,44 @@ class ItemResponse {
     }.toString();
   }
 }
+
+class ItemResponseItem {
+  final bool connected;
+  final bool enabled;
+  final (int, int)? ieid;
+  final String node;
+  final String oid;
+  final double? t;
+
+  ItemResponseItem(
+    this.connected,
+    this.enabled,
+    this.ieid,
+    this.node,
+    this.oid,
+    this.t,
+  );
+
+  factory ItemResponseItem.fromMap(dynamic map) {
+    return ItemResponseItem(
+      map['connected'],
+      map['enabled'],
+      map['ieid'] != null ? (map['ieid'][0], map['ieid'][1]) : null,
+      map['node'],
+      map['oid'],
+      map['t'],
+    );
+  }
+
+  @override
+  String toString() {
+    return {
+      'connected': connected,
+      'enabled': enabled,
+      'ieid': ieid,
+      'node': node,
+      'oid': oid,
+      't': t,
+    }.toString();
+  }
+}

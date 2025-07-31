@@ -1,11 +1,19 @@
 import 'package:eva_connector/src/rpc/can_do_rpc.dart';
+import 'package:eva_connector/src/rpc/responses/file_get_respone.dart';
 import 'package:eva_connector/src/rpc/responses/file_list_item_response.dart';
 import 'package:eva_connector/src/rpc/responses/file_sh_response.dart';
 import 'package:msgpack_dart/msgpack_dart.dart';
 
 mixin FileClient on CanDoRpc {
-  Future<Object> fileGet(String path, [mode = FileGetMode.i]) async {
-    return await baseCall('file.get', {'path': path, 'mode': mode.name});
+  Future<FileGetRespone> fileGet(
+    String path, [
+    FileGetMode mode = FileGetMode.i,
+  ]) async {
+    final rpcRes = await baseCall('file.get', {
+      'path': path,
+      'mode': mode.name,
+    });
+    return FileGetRespone.fromMap(rpcRes);
   }
 
   /// content [String]|[List<int>]
@@ -21,7 +29,7 @@ mixin FileClient on CanDoRpc {
       'path': path,
       'content': content,
       if (permissions != null) 'permissions': permissions,
-      'extract': extract,
+      'extract': extract.name,
       if (download != null) 'download': download,
     });
   }
@@ -38,8 +46,8 @@ mixin FileClient on CanDoRpc {
   ]) async {
     final rawResposne = await baseCall('list', {
       'path': path,
-      'masks': masks,
-      'kind': kind,
+      if (masks != null) 'masks': masks,
+      if (kind != null) 'kind': kind,
       'recursive': recursive,
     });
 
@@ -77,7 +85,7 @@ mixin FileClient on CanDoRpc {
   Future baseCall(String method, [Map? params]) async {
     final rpcRes = await rpcCall(
       'eva.filemgr.main',
-      'file.get',
+      method,
       params: serialize(params),
     );
 

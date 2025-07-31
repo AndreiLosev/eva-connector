@@ -25,7 +25,7 @@ class Configurator {
   }
 
   Future<List<Item>> pullItems(RpcClient client, String oidPattern) async {
-    final items = await client.getItemState(oidPattern);
+    final items = await client.getItmesList(oidPattern);
     final oids = items.map((e) => e.oid).toList();
     final itemConfigs = <Item>[];
     for (var oid in oids) {

@@ -1,6 +1,10 @@
-void main(List<String> args) {
-  final x = 0.3 - 0.2;
-  final y = 0.3 - 0.2;
+import 'dart:io';
 
-  print(x == y);
+class WordCounter {
+  int countWords(String filePath) {
+    final file = File(filePath);
+    final content = file.readAsStringSync();
+    final words = content.split(RegExp(r'\s+'));
+    return words.length;
+  }
 }

@@ -33,6 +33,8 @@ export 'package:eva_connector/src/eva-config/svcs/system_monitoring_service/syst
 export 'package:eva_connector/src/eva-config/svcs/system_monitoring_service/system_monitoring_service.dart';
 export 'package:eva_connector/src/rpc/responses/test_response.dart';
 export 'package:eva_connector/src/rpc/responses/log_response_item.dart';
+export 'package:eva_connector/src/rpc/responses/file_list_item_response.dart';
+export 'package:eva_connector/src/rpc/responses/file_sh_response.dart';
 export 'package:eva_connector/src/eva-config/configurator.dart';
 export 'package:yaml_writer/yaml_writer.dart';
 export 'package:yaml/yaml.dart';

@@ -1,22 +1,15 @@
-import 'package:busrt_client/busrt_client.dart';
-import 'package:eva_connector/src/Configs/config.dart';
-import 'package:msgpack_dart/msgpack_dart.dart';
+import 'package:eva_connector/eva_connector.dart';
+import 'package:eva_connector/src/rpc/by_industry/file_client.dart';
 
 void main(List<String> args) async {
-  final id = 'eva.filemgr.main';
   final config = Config();
-  final bus = Bus(config.ideName);
-  await bus.connect(config.evaSoket);
-  final rpc = Rpc(bus);
-  final r = await rpc.call(id, 'sh', params: serialize({'c': 'ls'}));
-  final f = await r.waitCompleted();
+  config.evaSoket = '192.168.1.47:10001';
+  final client = RpcClient.short(config);
+  await client.connect();
 
-  if (f == null) {
-    print("not found");
-    return;
-  }
+  await client.filePut('new-file.txt', "wasa + 1");
+  print((await client.fileGet('new-file.txt', FileGetMode.t)).text);
+  await client.fileUnlink('new-file.txt');
 
-  print(deserialize(f.payload));
-
-  bus.disconnect();
+  await client.disconnect();
 }
