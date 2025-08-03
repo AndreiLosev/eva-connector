@@ -5,6 +5,8 @@ import 'package:eva_connector/src/rpc/responses/file_sh_response.dart';
 import 'package:msgpack_dart/msgpack_dart.dart';
 
 mixin FileClient on CanDoRpc {
+  String defaultSvc = 'eva.filemgr.main';
+
   Future<FileGetRespone> fileGet(
     String path, [
     FileGetMode mode = FileGetMode.i,
@@ -74,7 +76,7 @@ mixin FileClient on CanDoRpc {
 
   Future<void> baseCall0(String method, [Map? params]) async {
     final rpcRes = await rpcCall0(
-      'eva.filemgr.main',
+      defaultSvc,
       method,
       params: serialize(params),
     );
@@ -83,11 +85,7 @@ mixin FileClient on CanDoRpc {
   }
 
   Future baseCall(String method, [Map? params]) async {
-    final rpcRes = await rpcCall(
-      'eva.filemgr.main',
-      method,
-      params: serialize(params),
-    );
+    final rpcRes = await rpcCall(defaultSvc, method, params: serialize(params));
 
     final frame = await rpcRes.waitCompleted();
     if (frame == null) {
