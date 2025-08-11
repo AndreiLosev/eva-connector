@@ -26,7 +26,7 @@ class Bus implements Serializable {
     bufTtl = map['buf_ttl'];
     path = map['path'];
     queueSize = map['queue_size'];
-    timout = map['timout'];
+    timout = (map['timout'] as num?)?.toDouble();
     type = map['type'];
   }
 }

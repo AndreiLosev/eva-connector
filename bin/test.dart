@@ -1,10 +1,6 @@
-import 'dart:io';
+void main() {
+  final x = [1, 2, 3, 4, 5];
+  final y = x.cast<int?>().firstWhere((x) => x == 13, orElse: () => null);
 
-class WordCounter {
-  int countWords(String filePath) {
-    final file = File(filePath);
-    final content = file.readAsStringSync();
-    final words = content.split(RegExp(r'\s+'));
-    return words.length;
-  }
+  print(y);
 }

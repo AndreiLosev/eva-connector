@@ -67,7 +67,7 @@ class ItemResponseItem {
       map['ieid'] != null ? (map['ieid'][0], map['ieid'][1]) : null,
       map['node'],
       map['oid'],
-      map['t'],
+      (map['t'] as num?)?.toDouble(),
     );
   }
 

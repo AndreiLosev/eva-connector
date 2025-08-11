@@ -21,7 +21,7 @@ class Action implements Serializable {
   @override
   void loadFromMap(Map map) {
     svc = map['svc'];
-    timeout = map['timeout'];
+    timeout = (map['timeout'] as num?)?.toDouble();
     config = map['config'];
   }
 }

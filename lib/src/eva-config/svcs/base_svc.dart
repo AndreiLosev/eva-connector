@@ -63,9 +63,9 @@ class BaseSvc<T extends ISvcConfig> implements Serializable {
     prepareCommand = map['prepare_command'];
     reactToFail = map['react_to_fail'];
     timeout = (
-      default1: map['timeout']['default'],
-      shutdown: map['timeout']['shutdown'],
-      startup: map['timeout']['startup'],
+      default1: (map['timeout']['default'] as num?)?.toDouble(),
+      shutdown: (map['timeout']['shutdown'] as num?)?.toDouble(),
+      startup: (map['timeout']['startup'] as num?)?.toDouble(),
     );
     config.loadFromMapEmpty(map['config']);
   }

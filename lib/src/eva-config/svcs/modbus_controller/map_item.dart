@@ -28,7 +28,7 @@ class MapItem {
     final res = MapItem(map['oid']);
     res.offset = _parseOffset(map['offset']);
     res.type = ModbusValueType.fromString(map['type']);
-    res.valueDelta = map['value_delta'];
+    res.valueDelta = (map['value_delta'] as num?)?.toDouble();
     res.transform = map['transform'] is List
         ? map['transform']
               .map(
