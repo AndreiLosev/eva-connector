@@ -36,7 +36,9 @@ class ModbusConfig extends ISvcConfig {
       'queue_size': queueSize,
       'retries': retries,
       'pull': pull.map((e) => e.toMap(modbus.protocol)).toList(),
-      'action_map': actionMap.map((k, v) => MapEntry(k, v.toMap())),
+      'action_map': actionMap.map(
+        (k, v) => MapEntry(k, v.toMap(modbus.protocol)),
+      ),
     };
   }
 

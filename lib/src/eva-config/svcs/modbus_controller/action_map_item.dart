@@ -6,14 +6,13 @@ class ActionMapItem {
   ModbusValueType? type = ModbusValueType.uint16;
   int? unit;
 
-  Map<String, dynamic> toMap() {
-    return Map.fromEntries(
-      [
-        MapEntry('reg', reg.toString()),
-        MapEntry('type', type?.toString()),
-        MapEntry('unit', unit),
-      ].where((e) => e.value != null),
-    );
+  Map<String, dynamic> toMap([ModbusProtocol? protocol]) {
+    return {
+      'reg': reg.toString(),
+      if ([Holding, Input].contains(reg.runtimeType)) 'type': type.toString(),
+      if (unit != null && (protocol == ModbusProtocol.rtu || protocol == null))
+        'unit': unit,
+    };
   }
 
   static ActionMapItem loadFromMap(Map map) {
