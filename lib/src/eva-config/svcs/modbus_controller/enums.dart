@@ -27,16 +27,16 @@ enum ModbusValueType with EnumToStrig {
   dword,
   sint16,
   int16,
-  sing32,
+  sint32,
   int32,
   sint64,
   int64,
   uint64,
   qword;
 
-  static ModbusValueType? fromString(String? str) {
+  static ModbusValueType fromString(String? str) {
     if (str == null) {
-      return null;
+      return ModbusValueType.uint16;
     }
     return switch (str) {
       'real' => ModbusValueType.real,
@@ -50,7 +50,7 @@ enum ModbusValueType with EnumToStrig {
       'dword' => ModbusValueType.dword,
       'sint16' => ModbusValueType.sint16,
       'int16' => ModbusValueType.int16,
-      'sint32' => ModbusValueType.sing32,
+      'sint32' => ModbusValueType.sint32,
       'int32' => ModbusValueType.int32,
       'sint64' => ModbusValueType.sint64,
       'int64' => ModbusValueType.int64,
