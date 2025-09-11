@@ -1,3 +1,4 @@
+import 'package:eva_connector/src/rpc/by_industry/enums.dart';
 import 'package:eva_connector/src/rpc/can_do_rpc.dart';
 import 'package:eva_connector/src/rpc/responses/file_get_respone.dart';
 import 'package:eva_connector/src/rpc/responses/file_list_item_response.dart';
@@ -11,7 +12,7 @@ mixin FileClient on CanDoRpc {
     String path, [
     FileGetMode mode = FileGetMode.i,
   ]) async {
-    final rpcRes = await baseCall('file.get', {
+    final rpcRes = await _baseCall('file.get', {
       'path': path,
       'mode': mode.name,
     });
@@ -23,11 +24,11 @@ mixin FileClient on CanDoRpc {
   Future<void> filePut(
     String path,
     Object content, [
-    Object? permissions,
     FilePutExtract extract = FilePutExtract.no,
+    Object? permissions,
     bool? download,
   ]) async {
-    await baseCall0('file.put', {
+    await _baseCall0('file.put', {
       'path': path,
       'content': content,
       if (permissions != null) 'permissions': permissions,
@@ -37,16 +38,16 @@ mixin FileClient on CanDoRpc {
   }
 
   Future<void> fileUnlink(String path) async {
-    await baseCall0('file.unlink', {'path': path});
+    await _baseCall0('file.unlink', {'path': path});
   }
 
   Future<List<FileListItemResponse>> list([
-    String path = '.',
+    String path = '',
     String? masks,
     String? kind,
     bool recursive = false,
   ]) async {
-    final rawResposne = await baseCall('list', {
+    final rawResposne = await _baseCall('list', {
       'path': path,
       if (masks != null) 'masks': masks,
       if (kind != null) 'kind': kind,
@@ -54,7 +55,7 @@ mixin FileClient on CanDoRpc {
     });
 
     return (rawResposne as List)
-        .map((e) => FileListItemResponse.fromMap(e))
+        .map((e) => FileListItemResponse.fromMap(e, path))
         .toList();
   }
 
@@ -64,7 +65,7 @@ mixin FileClient on CanDoRpc {
     String? stdin,
     bool checkExitCode = false,
   ]) async {
-    final raw = await baseCall('sh', {
+    final raw = await _baseCall('sh', {
       'c': c,
       'timeout': timeout,
       'stdin': stdin,
@@ -74,17 +75,13 @@ mixin FileClient on CanDoRpc {
     return FileShResponse.fromMap(raw);
   }
 
-  Future<void> baseCall0(String method, [Map? params]) async {
-    final rpcRes = await rpcCall0(
-      defaultSvc,
-      method,
-      params: serialize(params),
-    );
+  Future<void> _baseCall0(String method, [Map? params]) async {
+    final rpcRes = await rpcCall(defaultSvc, method, params: serialize(params));
 
     await rpcRes.waitCompleted();
   }
 
-  Future baseCall(String method, [Map? params]) async {
+  Future _baseCall(String method, [Map? params]) async {
     final rpcRes = await rpcCall(defaultSvc, method, params: serialize(params));
 
     final frame = await rpcRes.waitCompleted();
@@ -95,7 +92,3 @@ mixin FileClient on CanDoRpc {
     return deserialize(frame.payload);
   }
 }
-
-enum FileGetMode { i, x, t, b }
-
-enum FilePutExtract { no, tar, txz, tgz, tbz2, zip }

@@ -31,10 +31,6 @@ export 'package:eva_connector/src/eva-config/svcs/item_state_expiration_service/
 export 'package:eva_connector/src/eva-config/svcs/item_state_expiration_service/item_state_expiration_config.dart';
 export 'package:eva_connector/src/eva-config/svcs/system_monitoring_service/system_monitoring_config.dart';
 export 'package:eva_connector/src/eva-config/svcs/system_monitoring_service/system_monitoring_service.dart';
-export 'package:eva_connector/src/rpc/responses/test_response.dart';
-export 'package:eva_connector/src/rpc/responses/log_response_item.dart';
-export 'package:eva_connector/src/rpc/responses/file_list_item_response.dart';
-export 'package:eva_connector/src/rpc/responses/file_sh_response.dart';
 export 'package:eva_connector/src/eva-config/configurator.dart';
 export 'package:yaml_writer/yaml_writer.dart';
 export 'package:yaml/yaml.dart';

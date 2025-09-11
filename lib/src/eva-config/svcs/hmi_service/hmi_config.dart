@@ -47,7 +47,7 @@ class HmiConfig extends ISvcConfig {
   @override
   Map<String, dynamic> toMap() {
     return {
-      'api': api.map((e) => e.toMap()),
+      'api': api.map((e) => e.toMap()).toList(),
       if (db != null) 'db': db,
       if (apiFilter != null) 'api_filter': apiFilter,
       'auth_svcs': authSvcs,

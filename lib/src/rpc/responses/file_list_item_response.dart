@@ -4,9 +4,15 @@ class FileListItemResponse {
 
   FileListItemResponse(this.path, this.kind);
 
-  factory FileListItemResponse.fromMap(Map map) {
-    return FileListItemResponse(map['path'], FileKind.fromString(map['kind']));
+  factory FileListItemResponse.fromMap(Map map, [String parentPath = '']) {
+    final path = parentPath.isEmpty
+        ? map['path']
+        : "$parentPath/${map['path']}";
+    return FileListItemResponse(path, FileKind.fromString(map['kind']));
   }
+
+  FileListItemResponse addParrent(String parent) =>
+      FileListItemResponse('$parent/$path', kind);
 
   @override
   String toString() {

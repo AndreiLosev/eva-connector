@@ -1,6 +1,13 @@
-void main() {
-  final x = [1, 2, 3, 4, 5];
-  final y = x.cast<int?>().firstWhere((x) => x == 13, orElse: () => null);
+void main() async {
+  test1();
+  print('the end');
+}
 
-  print(y);
+void test1() {
+  try {
+    print('try');
+    return;
+  } finally {
+    print('finally');
+  }
 }

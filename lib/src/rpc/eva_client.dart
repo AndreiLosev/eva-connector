@@ -4,6 +4,7 @@ import 'package:eva_connector/eva_connector.dart';
 import 'package:eva_connector/src/eva-config/factory.dart';
 import 'package:eva_connector/src/rpc/by_industry/file_client.dart';
 import 'package:eva_connector/src/rpc/by_industry/item_client.dart';
+import 'package:eva_connector/src/rpc/by_industry/local_auth_client.dart';
 import 'package:eva_connector/src/rpc/by_industry/log_client.dart';
 import 'package:eva_connector/src/rpc/by_industry/svc_client.dart';
 import 'package:eva_connector/src/rpc/can_do_configuration.dart';
@@ -11,8 +12,15 @@ import 'package:eva_connector/src/rpc/can_do_rpc.dart';
 import 'package:msgpack_dart/msgpack_dart.dart';
 import 'package:busrt_client/busrt_client.dart' as busrt;
 
+export 'package:eva_connector/src/rpc/responses/test_response.dart';
+export 'package:eva_connector/src/rpc/responses/log_response_item.dart';
+export 'package:eva_connector/src/rpc/responses/file_list_item_response.dart';
+export 'package:eva_connector/src/rpc/responses/file_sh_response.dart';
+export 'package:eva_connector/src/rpc/responses/auth_key_response.dart';
+export 'package:eva_connector/src/rpc/by_industry/enums.dart';
+
 class RpcClient extends _BaseClient
-    with ItemClient, SvcClient, LogClient, FileClient {
+    with ItemClient, SvcClient, LogClient, FileClient, LocalAuthClient {
   final Config config;
 
   RpcClient(super._rpc, super._factory, this.config);
