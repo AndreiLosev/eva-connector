@@ -11,7 +11,7 @@ class HmiConfig extends ISvcConfig {
   Session session = Session();
   UserData userData = UserData();
   int keepApiLog = 86400;
-  bool publicApiLog = true;
+  bool? publicApiLog = true;
   String uiPath = "ui";
   bool uiNotFoundToBase = true;
   String pvtPath = "pvt";
@@ -32,7 +32,7 @@ class HmiConfig extends ISvcConfig {
     session.loadFromMap(map['session'] as Map);
     userData.loadFromMap(map['user_data'] as Map);
     keepApiLog = map['keep_api_log'] as int;
-    publicApiLog = map['public_api_log'] as bool;
+    publicApiLog = map['public_api_log'] as bool?;
     uiPath = map['ui_path'] as String;
     uiNotFoundToBase = map['ui_not_found_to_base'] ?? true;
     pvtPath = map['pvt_path'] as String;
@@ -54,7 +54,7 @@ class HmiConfig extends ISvcConfig {
       'session': session.toMap(),
       'user_data': userData.toMap(),
       'keep_api_log': keepApiLog,
-      'public_api_log': publicApiLog,
+      if (publicApiLog != null) 'public_api_log': publicApiLog,
       'ui_path': uiPath,
       'ui_not_found_to_base': uiNotFoundToBase,
       'pvt_path': pvtPath,
