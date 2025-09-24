@@ -1,17 +1,23 @@
 import 'package:busrt_client/busrt_client.dart';
-import 'package:eva_connector/src/Configs/config.dart';
-import 'package:eva_connector/src/eva-config/configurator.dart';
-import 'package:eva_connector/src/eva-config/factory.dart';
-import 'package:eva_connector/src/rpc/eva_client.dart';
-import 'package:yaml_writer/yaml_writer.dart';
+import 'package:msgpack_dart/msgpack_dart.dart';
 
 void main(List<String> args) async {
-  final config = Config();
-  final bus = Bus(config.ideName);
-  await bus.connect(config.evaSoket);
+  final bus = Bus('losev.test');
+  await bus.connect('192.168.1.47:10001');
   final rpc = Rpc(bus);
-  final c = RpcClient(rpc, Factory());
-  final configurator = Configurator(c, config, YamlWriter());
-  await configurator.pullAll();
+
+  final res = await rpc.call(
+    'softkip.events.alarms',
+    'event.acknowledge',
+    params: serialize({
+      'ids': [180, 181, 182, 183, 184, 185, 186, 187],
+    }),
+  );
+
+  final p = await res.waitCompleted();
+
+  print(deserialize(p!.payload));
+  // (deserialize(p!.payload)['events'] as List).forEach(print);
+
   bus.disconnect();
 }

@@ -1,6 +1,7 @@
 import 'package:eva_connector/src/eva-config/items/item.dart';
 import 'package:eva_connector/src/eva-config/svcs/base_svc.dart';
 import 'package:eva_connector/src/eva-config/svcs/db_sql/db_sql_history.dart';
+import 'package:eva_connector/src/eva-config/svcs/events_service/event_service.dart';
 import 'package:eva_connector/src/eva-config/svcs/hmi_service/hmi_service.dart';
 import 'package:eva_connector/src/eva-config/svcs/item_state_expiration_service/item_state_expiration_service.dart';
 import 'package:eva_connector/src/eva-config/svcs/logic_manager/logic_manager.dart';
@@ -27,6 +28,7 @@ class Factory {
       HmiService.svcCommand => HmiService(id),
       ScriptRunnerController.svcCommand => ScriptRunnerController(id),
       SystemMonitoringService.svcCommand => SystemMonitoringService(id),
+      EventService.svcCommand => EventService(id),
       _ => throw UnsupportedService(map['command']),
     };
 

@@ -23,6 +23,8 @@ export 'package:eva_connector/src/eva-config/svcs/logic_manager/logic_manager_co
 export 'package:eva_connector/src/eva-config/svcs/mqtt_controller/mqtt_controller.dart';
 export 'package:eva_connector/src/eva-config/svcs/mqtt_controller/mqtt_config.dart';
 
+export 'package:eva_connector/src/eva-config/svcs/events_service/export.dart';
+
 export 'package:eva_connector/src/eva-config/svcs/shared_lock_service/shared_lock_service.dart';
 export 'package:eva_connector/src/eva-config/svcs/shared_lock_service/shared_lock_config.dart';
 export 'package:eva_connector/src/eva-config/svcs/script_runner_controller/script_runner_controller.dart';
