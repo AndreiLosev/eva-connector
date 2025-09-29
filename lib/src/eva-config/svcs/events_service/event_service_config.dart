@@ -32,7 +32,9 @@ class EventServiceConfig extends ISvcConfig {
 }
 
 class Event {
-  String name = 'event name';
+  String name = 'новое событие';
+
+  Event();
 
   Event.loadFromMap(Map map) : name = map['name'];
 
