@@ -1,7 +1,7 @@
 import 'package:eva_connector/src/eva-config/svcs/isvc_config.dart';
 
 class DbSqlConfig extends ISvcConfig {
-  String db = 'sqlite:///tmp/eva_history.db';
+  String db = 'postgres://USER:PASSWORD@HOST/DB';
   int? bufTtlSec;
   int? interval;
   bool skipDisconnected = false;
