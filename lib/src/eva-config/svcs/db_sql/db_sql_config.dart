@@ -10,7 +10,7 @@ class DbSqlConfig extends ISvcConfig {
   int keep = 604800;
   int queueSize = 8192;
   int panicIn = 0;
-  List<String> oids = ['*'];
+  List<String> oids = ['#'];
   List<String> oidsExclude = [];
 
   @override
