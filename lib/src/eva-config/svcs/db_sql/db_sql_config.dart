@@ -6,7 +6,7 @@ class DbSqlConfig extends ISvcConfig {
   int? interval;
   bool skipDisconnected = false;
   bool ignoreEvents = false;
-  int keep = 2592000;
+  int? keep = 2592000;
   int queueSize = 8192;
   int panicIn = 0;
   List<String> oids = ['#'];
