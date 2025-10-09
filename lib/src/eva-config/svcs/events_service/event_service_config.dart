@@ -4,7 +4,7 @@ class EventServiceConfig extends ISvcConfig {
   String db = 'postgres://postgres:password@127.0.0.1:5432/scada?table=events';
   String updateLvar = '';
   int currentEventLimit = 30;
-  int removeEventsAfterDays = 365;
+  int? removeEventsAfterDays = 30;
   Map<String, Event> events = {};
 
   @override

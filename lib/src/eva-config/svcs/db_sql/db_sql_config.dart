@@ -6,8 +6,7 @@ class DbSqlConfig extends ISvcConfig {
   int? interval;
   bool skipDisconnected = false;
   bool ignoreEvents = false;
-  bool simpleCleaning = false;
-  int keep = 604800;
+  int keep = 2592000;
   int queueSize = 8192;
   int panicIn = 0;
   List<String> oids = ['#'];
@@ -21,7 +20,6 @@ class DbSqlConfig extends ISvcConfig {
       'interval': interval,
       'skip_disconnected': skipDisconnected,
       'ignore_events': ignoreEvents,
-      'simple_cleaning': simpleCleaning,
       'keep': keep,
       'queue_size': queueSize,
       'panic_in': panicIn,
@@ -37,7 +35,6 @@ class DbSqlConfig extends ISvcConfig {
     interval = map['interval'];
     skipDisconnected = map['skip_disconnected'];
     ignoreEvents = map['ignore_events'];
-    simpleCleaning = map['simple_cleaning'];
     keep = map['keep'];
     queueSize = map['queue_size'];
     panicIn = map['panic_in'];
