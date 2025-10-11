@@ -24,6 +24,7 @@ export 'package:eva_connector/src/eva-config/svcs/mqtt_controller/mqtt_controlle
 export 'package:eva_connector/src/eva-config/svcs/mqtt_controller/mqtt_config.dart';
 
 export 'package:eva_connector/src/eva-config/svcs/events_service/export.dart';
+export 'package:eva_connector/src/eva-config/svcs/unknown_service.dart';
 
 export 'package:eva_connector/src/eva-config/svcs/shared_lock_service/shared_lock_service.dart';
 export 'package:eva_connector/src/eva-config/svcs/shared_lock_service/shared_lock_config.dart';

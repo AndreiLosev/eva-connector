@@ -12,7 +12,7 @@ import 'package:eva_connector/src/eva-config/svcs/s7_controller/s7_controller.da
 import 'package:eva_connector/src/eva-config/svcs/script_runner_controller/script_runner_controller.dart';
 import 'package:eva_connector/src/eva-config/svcs/shared_lock_service/shared_lock_service.dart';
 import 'package:eva_connector/src/eva-config/svcs/system_monitoring_service/system_monitoring_service.dart';
-import 'package:eva_connector/src/exceptions/unsupported_service.dart';
+import 'package:eva_connector/src/eva-config/svcs/unknown_service.dart';
 
 class Factory {
   BaseSvc makeSvc(String id, Map map) {
@@ -29,7 +29,7 @@ class Factory {
       ScriptRunnerController.svcCommand => ScriptRunnerController(id),
       SystemMonitoringService.svcCommand => SystemMonitoringService(id),
       EventService.svcCommand => EventService(id),
-      _ => throw UnsupportedService(map['command']),
+      _ => UnknownService(id),
     };
 
     svc.loadFromMap(map);
