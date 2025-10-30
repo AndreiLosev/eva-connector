@@ -1,7 +1,8 @@
 import 'package:eva_connector/src/eva-config/svcs/isvc_config.dart';
 
 class EventServiceConfig extends ISvcConfig {
-  String db = 'postgres://postgres:password@127.0.0.1:5432/scada?table=events';
+  String db = 'postgres://postgres:password@127.0.0.1:5432/scada';
+  String table = 'events';
   String updateLvar = '';
   int currentEventLimit = 30;
   int? removeEventsAfterDays = 30;
@@ -10,6 +11,7 @@ class EventServiceConfig extends ISvcConfig {
   @override
   void loadFromMap(Map map) {
     db = map['db'];
+    table = map['table'] ?? 'events';
     updateLvar = map['update_lvar'];
     currentEventLimit = map['current_event_limit'];
     removeEventsAfterDays = map['remove_events_after_days'];
@@ -23,6 +25,7 @@ class EventServiceConfig extends ISvcConfig {
   Map<String, dynamic> toMap() {
     return {
       'db': db,
+      'table': table,
       'update_lvar': updateLvar,
       'current_event_limit': currentEventLimit,
       'remove_events_after_days': removeEventsAfterDays,
