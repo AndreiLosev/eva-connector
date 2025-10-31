@@ -55,7 +55,7 @@ class BaseSvc<T extends ISvcConfig> implements Serializable {
     bus.loadFromMap(map['bus']);
     callTracing = map['call_tracing'];
     command = map['command'];
-    user = map['user'];
+    user = map['user'] ?? 'nobody';
     workers = map['workers'];
     enabled = map['enabled'];
     launcher = map['launcher'];
