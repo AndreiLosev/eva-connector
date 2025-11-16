@@ -1,6 +1,5 @@
 import 'package:eva_connector/src/eva-config/svcs/isvc_config.dart';
 import 'package:eva_connector/src/eva-config/svcs/s7_controller/action_map.dart';
-import 'package:eva_connector/src/eva-config/svcs/s7_controller/enums.dart';
 import 'package:eva_connector/src/eva-config/svcs/s7_controller/pull_config.dart';
 
 class S7Config extends ISvcConfig {

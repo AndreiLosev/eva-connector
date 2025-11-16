@@ -1,3 +1,4 @@
+import 'package:eva_connector/src/eva-config/svcs/modbus_controller/enums.dart';
 import 'package:eva_connector/src/eva-config/svcs/s7_controller/enums.dart';
 
 class OffsetMap {
@@ -5,7 +6,7 @@ class OffsetMap {
   String oid;
   S7Type? type;
   double? valueDelta;
-  List<Transform>? transform;
+  List<({ModbusTrasformFunc func, List<int> params})>? transform;
 
   OffsetMap(this.oid);
 
@@ -14,8 +15,15 @@ class OffsetMap {
     res.offset = parseOffset(map['offset']);
     res.type = S7Type.fromString(map['type']);
     res.valueDelta = map['value_delta']?.toDouble();
-    res.transform = map['transform'] != null
-        ? (map['transform'] as List).map((e) => Transform.fromMap(e)).toList()
+    res.transform = map['transform'] is List
+        ? map['transform']
+              .map(
+                (e) => (
+                  func: ModbusTrasformFunc.fromString(e['func']),
+                  params: (e['params'] as List).map((e) => e as int).toList(),
+                ),
+              )
+              .toList()
         : null;
 
     return res;
@@ -28,25 +36,9 @@ class OffsetMap {
       if (type != null) 'type': type,
       if (valueDelta != null) 'value_delta': valueDelta,
       if (transform != null)
-        'transform': transform!.map((e) => e.toMap()).toList(),
+        'transform': transform?.map(
+          (e) => {'func': e.func.toString(), 'params': e.params},
+        ),
     };
-  }
-}
-
-class Transform {
-  TransformFunc func;
-  List<dynamic> params;
-
-  Transform({required this.func, required this.params});
-
-  static Transform fromMap(Map map) {
-    return Transform(
-      func: TransformFunc.values.byName(map['func']),
-      params: map['params'] ?? [],
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {'func': func.name, 'params': params};
   }
 }

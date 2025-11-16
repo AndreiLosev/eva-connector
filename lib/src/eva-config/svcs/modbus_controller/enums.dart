@@ -79,11 +79,11 @@ enum ModbusTrasformFunc with EnumToStrig {
 
   static ModbusTrasformFunc fromString(String str) {
     return switch (str) {
-      'multiply' => ModbusTrasformFunc.multiply,
-      'divide' => ModbusTrasformFunc.divide,
-      'round' => ModbusTrasformFunc.round,
-      'calc_speed' => ModbusTrasformFunc.calcSpeed,
-      'invalid' => ModbusTrasformFunc.invert,
+      'multiply' => .multiply,
+      'divide' => .divide,
+      'round' => .round,
+      'calc_speed' => .calcSpeed,
+      'invalid' => .invert,
       _ => throw Exception('invalid ModbusTrasformFunc: $str'),
     };
   }

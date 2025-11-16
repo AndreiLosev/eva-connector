@@ -90,15 +90,6 @@ class DataBlock extends S7Area {
   }
 }
 
-enum TransformFunc with EnumToStrig {
-  invert,
-  add,
-  subtract,
-  multiply,
-  divide,
-  round,
-}
-
 (int, int?) parseOffset(Object mOffset) {
   if (mOffset is int) {
     return (mOffset, null);
