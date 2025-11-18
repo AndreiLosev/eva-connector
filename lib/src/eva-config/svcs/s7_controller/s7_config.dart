@@ -11,7 +11,7 @@ class S7Config extends ISvcConfig {
   int pullCacheSec = 3600;
   double pullInterval = 2;
   List<PullConfig> pull = [];
-  Map<String, ActionMap> actionMap = {};
+  Map<String, ActionMapItem> actionMap = {};
 
   @override
   void loadFromMap(Map data) {
@@ -24,7 +24,7 @@ class S7Config extends ISvcConfig {
     pullInterval = data['pull_interval'].toDouble();
     pull = (data['pull'] as List).map((e) => PullConfig.fromMap(e)).toList();
     actionMap = (data['action_map'] as Map).map(
-      (k, v) => MapEntry(k as String, ActionMap.fromMap(v)),
+      (k, v) => MapEntry(k as String, ActionMapItem.fromMap(v)),
     );
   }
 
