@@ -22,7 +22,7 @@ class S7ActionMapItem {
       'offset': offset.$2 == null ? offset.$1 : "${offset.$1}/${offset.$2}",
     };
     if (type != null) {
-      res['type'] = type!;
+      res['type'] = type!.name;
     }
     return res;
   }
