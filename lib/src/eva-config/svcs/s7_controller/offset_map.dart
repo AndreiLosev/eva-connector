@@ -33,7 +33,7 @@ class OffsetMap {
     return {
       'offset': offset.$2 == null ? offset.$1 : "${offset.$1}/${offset.$2}",
       'oid': oid,
-      if (type != null) 'type': type,
+      if (type != null) 'type': type.toString(),
       if (valueDelta != null) 'value_delta': valueDelta,
       if (transform != null)
         'transform': transform?.map(
