@@ -17,7 +17,7 @@ class PullConfig {
 
   Map<String, dynamic> toMap() {
     return {
-      'area': area,
+      'area': area.toString(),
       'single_request': singleRequest,
       'map': map.map((e) => e.toMap()).toList(),
     };

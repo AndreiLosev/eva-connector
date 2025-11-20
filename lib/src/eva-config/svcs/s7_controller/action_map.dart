@@ -17,7 +17,7 @@ class S7ActionMapItem {
   }
 
   Map<String, dynamic> toMap() {
-    final res = {'area': area, 'offset': offset};
+    final res = {'area': area.toString(), 'offset': offset};
     if (type != null) {
       res['type'] = type!;
     }
