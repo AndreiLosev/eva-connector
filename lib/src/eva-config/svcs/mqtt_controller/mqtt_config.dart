@@ -8,9 +8,9 @@ import 'package:eva_connector/src/eva-config/svcs/mqtt_controller/pub_sub.dart';
 class MqttConfig extends ISvcConfig {
   int inputCacheSec = 3600;
   PubSub pubsub = PubSub();
-  List<Input>? input;
+  List<MqttInput>? input;
   List<Output>? output;
-  Map<String, ActionMap>? actionMap;
+  Map<String, MqttActionMap>? actionMap;
   Extra? extra;
 
   @override
@@ -31,13 +31,13 @@ class MqttConfig extends ISvcConfig {
     inputCacheSec = map['input_cache_sec'] ?? 3600;
     pubsub = PubSub()..loadFromMap(map['pubsub'] ?? {});
     input = (map['input'] as List?)
-        ?.map((e) => Input()..loadFromMap(e))
+        ?.map((e) => MqttInput()..loadFromMap(e))
         .toList();
     output = (map['output'] as List?)
         ?.map((e) => Output()..loadFromMap(e))
         .toList();
     actionMap = (map['action_map'] as Map?)?.map(
-      (k, v) => MapEntry(k.toString(), ActionMap()..loadFromMap(v)),
+      (k, v) => MapEntry(k.toString(), MqttActionMap()..loadFromMap(v)),
     );
     if (map['extra'] != null) {
       final ex = Extra();

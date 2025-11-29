@@ -1,7 +1,7 @@
 import 'package:eva_connector/src/eva-config/serializable.dart';
 import 'package:eva_connector/src/eva-config/svcs/mqtt_controller/input_map.dart';
 
-class Input implements Serializable {
+class MqttInput implements Serializable {
   String topic = 'test/test';
   String? packer = 'no';
   List<InputMap> map = [];

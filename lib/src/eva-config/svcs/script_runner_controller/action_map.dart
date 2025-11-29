@@ -1,11 +1,11 @@
 import 'package:eva_connector/src/eva-config/serializable.dart';
 
-class ActionMap implements Serializable {
+class ScriptActionMap implements Serializable {
   String command;
   int? timeout;
   bool updateAfter = true;
 
-  ActionMap(this.command);
+  ScriptActionMap(this.command);
 
   @override
   Map<String, dynamic> toMap() {

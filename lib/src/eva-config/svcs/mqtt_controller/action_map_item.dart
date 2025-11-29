@@ -1,12 +1,12 @@
 import 'package:eva_connector/src/eva-config/serializable.dart';
 import 'package:eva_connector/src/eva-config/svcs/modbus_controller/enums.dart';
 
-class ActionMapItem implements Serializable {
+class MqttActionMapItem implements Serializable {
   String path = r'$.';
   Map<String, dynamic>? valueMap;
   List<({ModbusTrasformFunc func, List<int> params})>? transform;
 
-  ActionMapItem();
+  MqttActionMapItem();
 
   @override
   Map<String, dynamic> toMap() {

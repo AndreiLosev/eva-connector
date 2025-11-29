@@ -1,12 +1,12 @@
 import 'package:eva_connector/src/eva-config/serializable.dart';
 import 'package:eva_connector/src/eva-config/svcs/mqtt_controller/action_map_item.dart';
 
-class ActionMap implements Serializable {
+class MqttActionMap implements Serializable {
   String topic = 'test/test';
   int? qos;
-  List<ActionMapItem> map = [];
+  List<MqttActionMapItem> map = [];
 
-  ActionMap();
+  MqttActionMap();
 
   @override
   Map<String, dynamic> toMap() {
@@ -23,7 +23,7 @@ class ActionMap implements Serializable {
     qos = map['qos'];
     this.map =
         (map['map'] as List?)
-            ?.map((e) => ActionMapItem()..loadFromMap(e))
+            ?.map((e) => MqttActionMapItem()..loadFromMap(e))
             .toList() ??
         [];
   }

@@ -6,7 +6,7 @@ import 'package:eva_connector/src/eva-config/svcs/script_runner_controller/updat
 class ScriptRunnerConfig extends ISvcConfig {
   List<UpdateCommand>? update;
   List<UpdatePipe>? updatePipe;
-  Map<String, ActionMap>? actionMap;
+  Map<String, ScriptActionMap>? actionMap;
   int queueSize = 2048;
   int actionQueueSize = 32;
 
@@ -44,7 +44,7 @@ class ScriptRunnerConfig extends ISvcConfig {
 
     actionMap?.clear();
     (map['action_map'] as Map).forEach((key, value) {
-      actionMap?[key as String] = ActionMap(value['command'])
+      actionMap?[key as String] = ScriptActionMap(value['command'])
         ..loadFromMap(value);
     });
 
