@@ -28,7 +28,11 @@ class ScriptRunnerConfig extends ISvcConfig {
   void loadFromMap(Map map) {
     final newUpdate = (map['update'] as List)
         .where((e) => e['command'] is String && e['oid'] is List)
-        .map((e) => UpdateCommand(e['command'], e['oid'])..loadFromMap(e));
+        .map(
+          (e) =>
+              UpdateCommand(e['command'], (e['oid'] as List).cast())
+                ..loadFromMap(e),
+        );
     update = newUpdate.isEmpty ? null : newUpdate.toList();
 
     final newUpdatePipe = (map['update_pipe'] as List)
