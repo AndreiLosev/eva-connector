@@ -3,7 +3,7 @@ import 'package:eva_connector/src/eva-config/serializable.dart';
 class ScriptActionMap implements Serializable {
   String command;
   int? timeout;
-  bool updateAfter = true;
+  bool updateAfter = false;
 
   ScriptActionMap(this.command);
 
