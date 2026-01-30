@@ -4,7 +4,7 @@ class Session implements Serializable {
   int timeout = 60;
   bool prolong = true;
   bool stickIp = true;
-  bool allowListNeighbors = true;
+  bool allowListNeighbors = false;
   bool allowConcurrent = true;
 
   @override
