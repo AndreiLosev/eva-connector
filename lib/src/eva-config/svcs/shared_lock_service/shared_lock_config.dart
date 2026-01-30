@@ -5,7 +5,10 @@ class SharedLockConfig extends ISvcConfig {
 
   @override
   void loadFromMap(Map map) {
-    locks = List<String>.from(map['locks'] ?? []);
+    locks = (map['locks'] as List<dynamic>?)
+            ?.map((e) => e.toString())
+            .toList() ??
+        [];
   }
 
   @override
