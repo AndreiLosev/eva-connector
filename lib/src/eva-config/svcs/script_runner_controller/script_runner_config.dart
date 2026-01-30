@@ -26,31 +26,26 @@ class ScriptRunnerConfig extends ISvcConfig {
 
   @override
   void loadFromMap(Map map) {
-    final newUpdate = (map['update'] as List)
-        .where((e) => e['command'] is String && e['oid'] is List)
+    final newUpdate = (map['update'] as List?)
+        ?.where((e) => e['command'] is String && e['oid'] is List)
         .map(
           (e) =>
               UpdateCommand(e['command'], (e['oid'] as List).cast())
                 ..loadFromMap(e),
         );
-    update = newUpdate.isEmpty ? null : newUpdate.toList();
+    update = (newUpdate?.isNotEmpty ?? false) ? newUpdate!.toList() : null;
 
-    final newUpdatePipe = (map['update_pipe'] as List)
-        .where((e) => e['command'] is String && e['process'] is String)
+    final newUpdatePipe = (map['update_pipe'] as List?)
+        ?.where((e) => e['command'] is String && e['process'] is String)
         .map((e) => UpdatePipe(e['command'], e['process']));
 
-    updatePipe = newUpdatePipe.isEmpty ? null : newUpdatePipe.toList();
+    updatePipe = (newUpdatePipe?.isNotEmpty ?? false) ? newUpdatePipe!.toList() : null;
 
-    actionMap?.clear();
-    if (map['action_map'] is Map && (map['action_map'] as Map).isNotEmpty) {
-      actionMap = {};
-      (map['action_map'] as Map).forEach((key, value) {
-        actionMap?[key as String] = ScriptActionMap(value['command'])
-          ..loadFromMap(value);
-      });
-    }
+    actionMap = (map['action_map'] as Map?)?.map(
+      (k, v) => MapEntry(k.toString(), ScriptActionMap(v['command'])..loadFromMap(v)),
+    );
 
-    queueSize = map['queue_size'] as int;
-    actionQueueSize = map['action_queue_size'] as int;
+    queueSize = map['queue_size'] as int? ?? queueSize;
+    actionQueueSize = map['action_queue_size'] as int? ?? actionQueueSize;
   }
 }
