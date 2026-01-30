@@ -11,7 +11,10 @@ class ItemStateExpirationConfig extends ISvcConfig {
 
   @override
   void loadFromMap(Map map) {
-    interval = map['interval'];
-    items = List<String>.from(map['items']);
+    interval = (map['interval'] as num?) ?? interval;
+    items = (map['items'] as List<dynamic>?)
+            ?.map((e) => e.toString())
+            .toList() ??
+        [];
   }
 }
