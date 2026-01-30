@@ -6,11 +6,15 @@ class DbSqlConfig extends ISvcConfig {
   int? interval;
   bool skipDisconnected = false;
   bool ignoreEvents = false;
-  int? keep = 2592000;
+  int? keep = 604800;
+  bool? cleanupOids;
   int queueSize = 8192;
   int panicIn = 0;
+  int? poolSize;
   List<String> oids = ['#'];
   List<String> oidsExclude = [];
+  bool? evaPg;
+  List<String> oidsExcludeNull = [];
 
   @override
   Map<String, dynamic> toMap() {
@@ -21,10 +25,14 @@ class DbSqlConfig extends ISvcConfig {
       'skip_disconnected': skipDisconnected,
       'ignore_events': ignoreEvents,
       'keep': keep,
+      'cleanup_oids': cleanupOids,
       'queue_size': queueSize,
       'panic_in': panicIn,
+      'pool_size': poolSize,
       'oids': oids,
       'oids_exclude': oidsExclude,
+      'eva_pg': evaPg,
+      'oids_exclude_null': oidsExcludeNull,
     };
   }
 
@@ -36,9 +44,13 @@ class DbSqlConfig extends ISvcConfig {
     skipDisconnected = map['skip_disconnected'];
     ignoreEvents = map['ignore_events'];
     keep = map['keep'];
+    cleanupOids = map['cleanup_oids'];
     queueSize = map['queue_size'];
     panicIn = map['panic_in'];
-    oids = List<String>.from(map['oids']);
-    oidsExclude = List<String>.from(map['oids_exclude']);
+    poolSize = map['pool_size'];
+    oids = List<String>.from(map['oids'] ?? ['#']);
+    oidsExclude = List<String>.from(map['oids_exclude'] ?? []);
+    evaPg = map['eva_pg'];
+    oidsExcludeNull = List<String>.from(map['oids_exclude_null'] ?? []);
   }
 }
