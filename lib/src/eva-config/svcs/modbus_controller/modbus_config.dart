@@ -12,7 +12,7 @@ class ModbusConfig extends ISvcConfig {
     unit: 1,
   );
   int? panicIn;
-  int pullCacheSec = 3600;
+  int pullCacheSec = 360;
   int pullInterval = 2;
   int queueSize = 32768;
   int retries = 2;
@@ -44,25 +44,40 @@ class ModbusConfig extends ISvcConfig {
 
   @override
   void loadFromMap(Map map) {
-    actionQueueSize = map['action_queue_size'];
-    actionsVerify = map['actions_verify'];
-    modbus = (
-      path: map['modbus']['path'] as String,
-      protocol: ModbusProtocol.fromString(map['modbus']['protocol']),
-      unit: map['modbus']['unit'] as int,
-    );
-    panicIn = map['panic_in'];
-    pullCacheSec = map['pull_cache_sec'];
-    pullInterval = map['pull_interval'];
-    queueSize = map['queue_size'];
-    retries = map['retries'];
+    actionQueueSize = map['action_queue_size'] as int? ?? actionQueueSize;
+    actionsVerify = map['actions_verify'] as bool? ?? actionsVerify;
+    
+    // Безопасная обработка modbus
+    if (map['modbus'] != null) {
+      modbus = (
+        path: map['modbus']['path'] as String? ?? modbus.path,
+        protocol: map['modbus']['protocol'] != null
+            ? ModbusProtocol.fromString(map['modbus']['protocol'] as String)
+            : modbus.protocol,
+        unit: map['modbus']['unit'] as int? ?? modbus.unit,
+      );
+    }
+    
+    panicIn = map['panic_in'] as int?;
+    pullCacheSec = map['pull_cache_sec'] as int? ?? pullCacheSec;
+    pullInterval = map['pull_interval'] as int? ?? pullInterval;
+    queueSize = map['queue_size'] as int? ?? queueSize;
+    retries = map['retries'] as int? ?? retries;
+    
+    // Безопасная обработка pull
     pull.clear();
-    for (var item in map['pull']) {
-      pull.add(PullItem.fromMap(item as Map));
+    if (map['pull'] != null) {
+      for (var item in map['pull'] as List) {
+        pull.add(PullItem.fromMap(item as Map));
+      }
     }
 
-    actionMap = (map['action_map'] as Map).map(
-      (k, v) => MapEntry(k as String, ActionMapItem.loadFromMap(v)),
-    );
+    // Безопасная обработка action_map
+    actionMap.clear();
+    if (map['action_map'] != null) {
+      actionMap = (map['action_map'] as Map).map(
+        (k, v) => MapEntry(k as String, ActionMapItem.loadFromMap(v as Map)),
+      );
+    }
   }
 }
