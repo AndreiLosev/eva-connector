@@ -6,6 +6,8 @@ class ExeTask {
   bool enabled = false;
   int interval = 1;
   List<ExeTaskMap> map = [];
+  List<String> ismap = [];
+  String? user;
 
   ExeTask();
 
@@ -20,6 +22,17 @@ class ExeTask {
           .map((m) => ExeTaskMap.fromMap(m as Map<String, dynamic>))
           .toList();
     }
+
+    if (map['ismap'] is List) {
+      ismap = (map['ismap'] as List).map((e) {
+        if (e is Map) {
+          return e['name']?.toString() ?? '';
+        }
+        return e.toString();
+      }).toList();
+    }
+
+    user = map['user'] as String?;
   }
 
   Map<String, dynamic> toMap() => {
@@ -28,5 +41,8 @@ class ExeTask {
     'enabled': enabled,
     'interval': interval,
     'map': map.map((m) => m.toMap()).toList(),
+    if (ismap.isNotEmpty)
+      'ismap': ismap.map((name) => {'name': name}).toList(),
+    if (user != null) 'user': user,
   };
 }
