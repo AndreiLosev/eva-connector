@@ -1,6 +1,6 @@
 class Job {
   String id;
-  String schedule = '0 */5 * * * *';
+  String schedule = '0 * * * * *';
   String run;
   List<dynamic> args = [];
   Map<String, dynamic> kwargs = {};
@@ -19,7 +19,7 @@ class Job {
 
   void loadFromMap(Map<String, dynamic> map) {
     id = map['id'] as String? ?? '';
-    schedule = map['schedule'] as String? ?? '0 */5 * * * *';
+    schedule = map['schedule'] as String? ?? '0 * * * * *';
     run = map['run'] as String? ?? '';
     args = map['args'] as List<dynamic>? ?? [];
     kwargs = map['kwargs'] as Map<String, dynamic>? ?? {};
