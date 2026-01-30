@@ -5,7 +5,7 @@ import 'package:eva_connector/src/eva-config/svcs/mqtt_controller/output_map.dar
 class Output implements Serializable {
   String topic = 'test/test';
   int? qos;
-  Process packer = Process.value;
+  Packer? packer = Packer.no;
   int? interval;
   bool? ignoreEvents;
   List<OutputMap> map = [];
@@ -17,7 +17,7 @@ class Output implements Serializable {
     return {
       'topic': topic,
       'qos': qos,
-      'packer': packer,
+      if (packer != null) 'packer': packer!.name,
       'interval': interval,
       'ignore_events': ignoreEvents,
       'map': map.map((e) => e.toMap()).toList(),
@@ -28,7 +28,7 @@ class Output implements Serializable {
   void loadFromMap(Map map) {
     topic = map['topic'] ?? '';
     qos = map['qos'];
-    packer = map['packer'];
+    packer = map['packer'] != null ? Packer.fromString(map['packer']) : Packer.no;
     interval = map['interval'];
     ignoreEvents = map['ignore_events'];
     this.map =

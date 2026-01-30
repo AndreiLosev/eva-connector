@@ -4,33 +4,34 @@ import 'package:eva_connector/src/eva-config/svcs/mqtt_controller/enums.dart';
 
 class OutputMap implements Serializable {
   String path = r'$.';
-  String oid;
-  Process prop = Process.value;
+  String? oid;
+  OutputProperty? prop;
   Map<String, dynamic>? valueMap;
   List<({ModbusTrasformFunc func, List<int> params})>? transform;
   dynamic payload;
 
-  OutputMap(this.oid);
+  OutputMap([this.oid]);
 
   @override
   Map<String, dynamic> toMap() {
     return {
       'path': path,
-      'oid': oid,
-      'prop': prop.name,
-      'value_map': valueMap,
-      'transform': transform?.map(
-        (e) => {'func': e.func.toString(), 'params': e.params},
-      ),
-      'payload': payload,
+      if (oid != null) 'oid': oid,
+      if (prop != null) 'prop': prop!.name,
+      if (valueMap != null) 'value_map': valueMap,
+      if (transform != null)
+        'transform': transform!.map(
+          (e) => {'func': e.func.toString(), 'params': e.params},
+        ),
+      if (payload != null) 'payload': payload,
     };
   }
 
   @override
   void loadFromMap(Map map) {
-    path = map['path'];
+    path = map['path'] ?? r'$.';
     oid = map['oid'];
-    prop = Process.fromString(map['prop'] ?? 'value');
+    prop = map['prop'] != null ? OutputProperty.fromString(map['prop']) : null;
     valueMap = map['value_map'];
     transform = map['transform'] is List
         ? map['transform']
