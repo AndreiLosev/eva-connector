@@ -18,9 +18,9 @@ class InputMap implements Serializable {
       'oid': oid,
       'process': process.name,
       'value_map': valueMap,
-      'transform': transform?.map(
-        (e) => {'func': e.func.toString(), 'params': e.params},
-      ),
+      'transform': transform
+          ?.map((e) => {'func': e.func.toString(), 'params': e.params})
+          .toList(),
     };
   }
 

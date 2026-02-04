@@ -1,14 +1,13 @@
-import 'dart:io';
-
 import 'package:eva_connector/eva_connector.dart';
+import 'package:eva_connector/src/eva-config/svcs/mqtt_controller/export.dart';
 
 void main(List<String> args) {
-  final c = Configurator.short();
-  final (_, s) = c.loadConfig(
-    File(
-      '/home/andrei/documents/second scada project/build/back-config.yaml',
-    ).readAsStringSync(),
-  );
+  final x = InputMap('sensor:test1/val1');
+  x.transform = [
+    (func: ModbusTrasformFunc.multiply, params: [2]),
+    (func: ModbusTrasformFunc.round, params: [2]),
+  ];
 
-  print(s.first.toMap());
+  print(x.toMap());
+  print(YamlWriter().write(x.toMap()));
 }
