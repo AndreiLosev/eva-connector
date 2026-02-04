@@ -30,7 +30,7 @@ class PubSub implements Serializable {
   void loadFromMap(Map map) {
     proto = map['proto'] ?? 'mqtt';
     caCerts = map['ca_certs'];
-    host = map['host'];
+    host = (map['host'] as List).cast();
     clusterHostsRandomize = map['cluster_hosts_randomize'];
     username = map['username'];
     password = map['password'];
