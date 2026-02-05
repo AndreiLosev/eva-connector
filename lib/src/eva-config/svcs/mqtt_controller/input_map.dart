@@ -29,7 +29,7 @@ class InputMap implements Serializable {
     path = map['path'];
     oid = map['oid'];
     process = Process.fromString(map['process'] ?? 'value');
-    valueMap = map['value_map'];
+    valueMap = (map['value_map'] as Map?)?.cast();
     transform = map['transform'] is List
         ? map['transform']
               .map(

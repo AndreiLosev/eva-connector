@@ -32,7 +32,7 @@ class OutputMap implements Serializable {
     path = map['path'] ?? r'$.';
     oid = map['oid'];
     prop = map['prop'] != null ? OutputProperty.fromString(map['prop']) : null;
-    valueMap = map['value_map'];
+    valueMap = (map['value_map'] as Map?)?.cast();
     transform = map['transform'] is List
         ? map['transform']
               .map(

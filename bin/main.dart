@@ -1,18 +1,13 @@
+import 'dart:io';
+
 import 'package:eva_connector/eva_connector.dart';
 
 void main(List<String> arguments) async {
-  final c = Config();
-  c.evaSoket = '192.168.1.3:10001';
-  final rpc = RpcClient.short(c);
-  await rpc.connect();
+  final c = Configurator.short();
+  final s = File(
+    '/home/andrei/documents/second scada project/build/back-config.yaml',
+  ).readAsStringSync();
+  final (_, svc) = c.loadConfig(s);
 
-  await rpc.filePut(
-    'file-test',
-    'https://github.com/AndreiLosev/eva-event-service/releases/download/1.1.5/softkip-event-service',
-    FilePutExtract.no,
-    null,
-    true,
-  );
-
-  await rpc.disconnect();
+  print(svc.first.toMap());
 }
