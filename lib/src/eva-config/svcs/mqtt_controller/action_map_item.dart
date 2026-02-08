@@ -6,7 +6,7 @@ class MqttActionMapItem implements Serializable {
   String path = r'$.';
   String? oid;
   OutputProperty? prop;
-  Map<dynamic, dynamic>? valueMap;
+  Map<String, dynamic>? valueMap;
   List<({ModbusTrasformFunc func, List<int> params})>? transform;
   dynamic payload;
 
