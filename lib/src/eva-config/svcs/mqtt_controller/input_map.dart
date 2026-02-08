@@ -6,7 +6,7 @@ class InputMap implements Serializable {
   String path = r'$.';
   String oid;
   Process process = Process.value;
-  Map<String, dynamic>? valueMap;
+  Map<dynamic, dynamic>? valueMap;
   List<({ModbusTrasformFunc func, List<int> params})>? transform;
 
   InputMap(this.oid);
@@ -17,7 +17,11 @@ class InputMap implements Serializable {
       'path': path,
       'oid': oid,
       'process': process.name,
-      'value_map': valueMap,
+      if (valueMap != null)
+        'value_map': Map.fromIterables(
+          valueMap!.keys.map((e) => e.toString()),
+          valueMap!.values,
+        ),
       'transform': transform
           ?.map((e) => {'func': e.func.toString(), 'params': e.params})
           .toList(),
