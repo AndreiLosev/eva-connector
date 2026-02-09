@@ -45,6 +45,7 @@ class MqttActionMapItem implements Serializable {
                   params: (e['params'] as List).map((e) => e as int).toList(),
                 ),
               )
+              .cast<({ModbusTrasformFunc func, List<int> params})>()
               .toList()
         : null;
     payload = map['payload'];

@@ -37,7 +37,7 @@ class OutputMap implements Serializable {
     oid = map['oid'];
     prop = map['prop'] != null ? OutputProperty.fromString(map['prop']) : null;
     valueMap = (map['value_map'] as Map?)?.cast();
-    transform = map['transform'] is List
+    map['transform'] is List
         ? map['transform']
               .map(
                 (e) => (
@@ -45,9 +45,9 @@ class OutputMap implements Serializable {
                   params: (e['params'] as List).map((e) => e as int).toList(),
                 ),
               )
+              .cast<({ModbusTrasformFunc func, List<int> params})>()
               .toList()
         : null;
-
     payload = map['payload'];
   }
 }
