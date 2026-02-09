@@ -24,9 +24,9 @@ class OutputMap implements Serializable {
           valueMap!.values,
         ),
       if (transform != null)
-        'transform': transform!.map(
-          (e) => {'func': e.func.toString(), 'params': e.params},
-        ),
+        'transform': transform!
+            .map((e) => {'func': e.func.toString(), 'params': e.params})
+            .toList(),
       if (payload != null) 'payload': payload,
     };
   }
