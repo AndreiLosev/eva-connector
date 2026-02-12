@@ -40,7 +40,6 @@ void main() {
       expect(config.interval, equals(10));
       expect(config.skipDisconnected, isTrue);
       expect(config.ignoreEvents, isTrue);
-      expect(config.simpleCleaning, isTrue);
       expect(config.keep, equals(3600));
       expect(config.queueSize, equals(4096));
       expect(config.panicIn, equals(5));

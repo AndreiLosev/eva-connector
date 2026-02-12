@@ -53,20 +53,23 @@ class BaseSvc<T extends ISvcConfig> implements Serializable {
   @override
   void loadFromMap(Map map) {
     bus.loadFromMap(map['bus']);
-    callTracing = map['call_tracing'];
+    callTracing = map['call_tracing'] ?? callTracing;
     command = map['command'];
     user = map['user'] ?? 'nobody';
-    workers = map['workers'];
-    enabled = map['enabled'];
-    launcher = map['launcher'];
-    memWarn = map['mem_warn'];
+    workers = map['workers'] ?? workers;
+    enabled = map['enabled'] ?? enabled;
+    launcher = map['launcher'] ?? launcher;
+    memWarn = map['mem_warn'] ?? memWarn;
     prepareCommand = map['prepare_command'];
-    reactToFail = map['react_to_fail'];
-    timeout = (
-      default1: (map['timeout']['default'] as num?)?.toDouble(),
-      shutdown: (map['timeout']['shutdown'] as num?)?.toDouble(),
-      startup: (map['timeout']['startup'] as num?)?.toDouble(),
-    );
+    reactToFail = map['react_to_fail'] ?? reactToFail;
+    if (map['timeout'] != null) {
+      timeout = (
+        default1: (map['timeout']['default'] as num?)?.toDouble(),
+        shutdown: (map['timeout']['shutdown'] as num?)?.toDouble(),
+        startup:
+            (map['timeout']['startup'] as num?)?.toDouble() ?? timeout.startup,
+      );
+    }
     config.loadFromMapEmpty(map['config']);
   }
 }
