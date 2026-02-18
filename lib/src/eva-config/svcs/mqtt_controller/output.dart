@@ -28,7 +28,9 @@ class Output implements Serializable {
   void loadFromMap(Map map) {
     topic = map['topic'] ?? '';
     qos = map['qos'];
-    packer = map['packer'] != null ? Packer.fromString(map['packer']) : Packer.no;
+    packer = map['packer'] != null
+        ? Packer.fromString(map['packer'])
+        : Packer.no;
     interval = map['interval'];
     ignoreEvents = map['ignore_events'];
     this.map =

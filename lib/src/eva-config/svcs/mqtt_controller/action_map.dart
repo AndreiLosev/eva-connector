@@ -1,9 +1,11 @@
+import 'package:eva_connector/eva_connector.dart';
 import 'package:eva_connector/src/eva-config/serializable.dart';
-import 'package:eva_connector/src/eva-config/svcs/mqtt_controller/action_map_item.dart';
 
 class MqttActionMap implements Serializable {
   String topic = 'test/test';
   int? qos;
+  Packer? packer = Packer.no;
+
   List<MqttActionMapItem> map = [];
 
   MqttActionMap();
