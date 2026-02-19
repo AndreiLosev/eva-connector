@@ -113,14 +113,15 @@ class Configurator {
         .toList();
 
     parseFiles(
-      (map['content'][0]['upload'] as List).cast(),
+      (map['content'][0]['upload'] as List?)?.cast(),
       svcs.whereType<HasFiles>(),
     );
 
     return (items, svcs);
   }
 
-  void parseFiles(List<Map<String, String>> files, Iterable<HasFiles> svcs) {
+  void parseFiles(List<Map<String, String>>? files, Iterable<HasFiles> svcs) {
+    if (files == null) return;
     for (var file in files) {
       for (var svc in svcs) {
         if (file['target']?.startsWith(svc.basePath()) ?? false) {
