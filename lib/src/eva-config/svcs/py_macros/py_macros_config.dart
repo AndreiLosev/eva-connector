@@ -1,4 +1,4 @@
-import 'package:eva_connector/src/eva-config/svcs/isvc_config.dart';
+import 'package:eva_connector/eva_connector.dart';
 
 class PyMacrosConfig extends ISvcConfig {
   String? lockerSvc;

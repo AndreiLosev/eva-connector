@@ -1,6 +1,7 @@
 import 'package:eva_connector/src/eva-config/factory.dart';
 import 'package:eva_connector/src/eva-config/items/item.dart';
 import 'package:eva_connector/src/eva-config/svcs/base_svc.dart';
+import 'package:eva_connector/src/eva-config/svcs/has_files.dart';
 import 'package:eva_connector/src/exceptions/unsupported_service.dart';
 import 'package:eva_connector/src/rpc/eva_client.dart';
 import 'package:yaml/yaml.dart';
@@ -20,6 +21,8 @@ class Configurator {
     await client.connect();
     final items = await pullItems(client, '*');
     final svcs = await pullSvcs(client);
+    await pullFiles(client, svcs);
+
     await client.disconnect();
     return (items, svcs);
   }
@@ -52,6 +55,25 @@ class Configurator {
     return configs;
   }
 
+  Future<void> pullFiles(RpcClient client, List<BaseSvc> svcs) async {
+    for (var svc in svcs) {
+      if (svc is! HasFiles) {
+        continue;
+      }
+      final files = await client.list(
+        (svc as HasFiles).basePath(),
+        null,
+        'file',
+        true,
+      );
+
+      for (var f in files) {
+        final contnet = await client.fileGet(f.path, FileGetMode.t);
+        (svc as HasFiles).putFile(f.path, contnet.text?.trim() ?? '');
+      }
+    }
+  }
+
   String makeConfig(List<Item> items, List<BaseSvc> svcs) {
     final map = {
       "version": 4,
@@ -60,6 +82,19 @@ class Configurator {
           "node": ".local",
           "items": items.map((e) => e.toMap()).toList(),
           "svcs": svcs.map((e) => e.toMap()).toList(),
+          "upload": svcs
+              .whereType<HasFiles>()
+              .map((svc) {
+                final files = svc.getFiles().entries.map(
+                  (e) => {
+                    'text': e.value.trim(),
+                    'target': '${svc.basePath()}/${e.key}',
+                  },
+                );
+                return List.from(files);
+              })
+              .expand((e) => e)
+              .toList(),
         },
       ],
     };
@@ -77,6 +112,24 @@ class Configurator {
         .map((e) => _factory.makeSvc(e['id'], e['params']))
         .toList();
 
+    parseFiles(
+      (map['content'][0]['upload'] as List).cast(),
+      svcs.whereType<HasFiles>(),
+    );
+
     return (items, svcs);
+  }
+
+  void parseFiles(List<Map<String, String>> files, Iterable<HasFiles> svcs) {
+    for (var file in files) {
+      for (var svc in svcs) {
+        if (file['target']?.startsWith(svc.basePath()) ?? false) {
+          svc.putFile(
+            file['target']!.replaceFirst("${svc.basePath()}/", ''),
+            file['text'] ?? '',
+          );
+        }
+      }
+    }
   }
 }
