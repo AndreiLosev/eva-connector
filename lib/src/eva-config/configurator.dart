@@ -86,10 +86,7 @@ class Configurator {
               .whereType<HasFiles>()
               .map((svc) {
                 final files = svc.getFiles().entries.map(
-                  (e) => {
-                    'text': e.value.trim(),
-                    'target': '${svc.basePath()}/${e.key}',
-                  },
+                  (e) => {'text': e.value.trim(), 'target': e.key},
                 );
                 return List.from(files);
               })
