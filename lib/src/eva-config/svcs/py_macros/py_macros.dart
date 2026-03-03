@@ -13,13 +13,13 @@ class PyMacros extends BaseSvc<PyMacrosConfig> implements HasFiles {
   Map<String, String> getFiles() {
     return {
       for (var item in scripts.entries)
-        '${config.macroDir}/${item.key}': item.value,
+        '${config.macroDir}/${item.key}.py': item.value,
     };
   }
 
   @override
   void putFile(String name, String content) {
-    scripts[name] = content;
+    scripts[name.replaceFirst(RegExp(r'\.py$'), '')] = content;
   }
 
   @override
