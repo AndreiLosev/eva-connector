@@ -120,7 +120,7 @@ class Configurator {
     return (items, svcs);
   }
 
-  void parseFiles(List<Map<String, String>>? files, Iterable<HasFiles> svcs) {
+  void parseFiles(List<Map>? files, Iterable<HasFiles> svcs) {
     if (files == null) return;
     for (var file in files) {
       for (var svc in svcs) {
