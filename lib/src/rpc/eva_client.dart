@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:eva_connector/eva_connector.dart';
@@ -42,10 +43,14 @@ class _BaseClient implements CanDoRpc, CanDoConfiguration {
   final busrt.Rpc _rpc;
   final Factory _factory;
 
+  final _subscribers = <String, FutureOr<void> Function(busrt.Frame f)>{};
+
   @override
   Factory get factory => _factory;
 
-  _BaseClient(this._rpc, this._factory);
+  _BaseClient(this._rpc, this._factory) {
+    _rpc.onFrame = _onFraneHandler;
+  }
 
   @override
   Future<busrt.RpcOpResult> rpcCall(
@@ -60,6 +65,16 @@ class _BaseClient implements CanDoRpc, CanDoConfiguration {
     String method, {
     Uint8List? params,
   }) => _rpc.call0(target, method, params: params);
+
+  void subscribe(String topic, FutureOr<void> Function(busrt.Frame f) fn) {
+    _subscribers[topic] = fn;
+    _rpc.bus.subscribe([topic]);
+  }
+
+  void unsubscribe(String topic) {
+    _subscribers.remove(topic);
+    _rpc.bus.unsubscribe([topic]);
+  }
 
   @override
   Future coreCall(String method, [Object? params]) async {
@@ -88,5 +103,12 @@ class _BaseClient implements CanDoRpc, CanDoConfiguration {
   Future<TestResponse> test() async {
     final rawRes = await coreCall('test');
     return TestResponse.fromMap(rawRes);
+  }
+
+  void _onFraneHandler(busrt.Frame f) {
+    if (f.topic == null) return;
+    final fn = _subscribers[f.topic!];
+    if (fn == null) return;
+    fn(f);
   }
 }

@@ -11,13 +11,13 @@ mixin Marcos on CanDoRpc {
     List? args,
     Map<String, dynamic>? kwargs,
   }) async {
-    rpcCall0(
-      'svcId',
+    final rpcRes = await rpcCall(
+      svcId,
       'run',
       params: serialize({
         'uuid': Uuid.parse(UuidV4().generate()),
         'i': lmacro.oid,
-        'timeout': 10,
+        'timeout': 10000000,
         'priority': 100,
         'params': {
           if (args != null) 'args': args,
@@ -25,5 +25,7 @@ mixin Marcos on CanDoRpc {
         },
       }),
     );
+
+    await rpcRes.waitCompleted();
   }
 }
