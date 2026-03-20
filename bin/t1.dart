@@ -6,7 +6,7 @@ void main(List<String> args) async {
   final client = RpcClient.short(c);
 
   final r = PyTestScriptRunner(
-    '/home/andrei/documents/my/eva_ide/assets/scripts/python/eva4-svc-linux',
+    '/home/andrei/.local/state/eva_ide/eva4-svc-linux',
     '/home/andrei/documents/my/eva_py_macros_test',
   );
 
