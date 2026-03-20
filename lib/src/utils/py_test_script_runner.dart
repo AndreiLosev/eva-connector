@@ -123,6 +123,11 @@ class PyTestScriptRunner {
   void _onActionFrane(Frame f) {
     if (f.sender != testSvcName && f.payload.isEmpty) return;
     final data = deserialize(f.payload);
+    if (data['status'] is int) {
+      if ((data['status'] as int).toActionsStatus().skip()) {
+        return;
+      }
+    }
     final text = {
       if (data['status'] is int)
         'status': (data['status'] as int).toActionsStatus().name,

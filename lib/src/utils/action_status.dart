@@ -18,6 +18,15 @@ enum ActionStatus {
     ActionStatus.canceled => 129,
     ActionStatus.terminated => 130,
   };
+
+  bool skip() {
+    return [
+      ActionStatus.created,
+      ActionStatus.accepted,
+      ActionStatus.pending,
+      ActionStatus.running,
+    ].contains(this);
+  }
 }
 
 extension ToActionsStatus on int {
