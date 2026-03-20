@@ -6,13 +6,13 @@ void main(List<String> args) async {
   final client = RpcClient.short(c);
 
   final r = PyTestScriptRunner(
-    '/home/andrei/documents/my/eva_py_macros_test/controller-py/bin/eva4-svc-controller-py',
+    '/home/andrei/documents/my/eva_ide/assets/scripts/python/eva4-svc-linux',
     '/home/andrei/documents/my/eva_py_macros_test',
   );
 
   try {
     await client.connect();
-    final res = await r.run(client, 'scriot-dir', Lmacro('lmacro:test1'));
+    final res = await r.run(client, 'scriot-dir', Lmacro('lmacro:test2'));
     print(res);
   } finally {
     client.disconnect();

@@ -33,11 +33,14 @@ class PyTestScriptRunner {
     Duration timeout = const Duration(seconds: 15),
   }) async {
     Process? process;
-    String result;
+    String? result;
     try {
       process = await _runTestSvc(svcId, cvars);
       await _runMacros(client, lmacro);
       result = await _wait(timeout, process);
+    } catch (e) {
+      _outBuffer.writeln(e);
+      result ??= 'error';
     } finally {
       await _clear(process);
     }
@@ -79,7 +82,7 @@ class PyTestScriptRunner {
 
   Future<Process> _runTestSvc(String svcId, Map<String, dynamic>? cvars) async {
     final process = await Process.start(_binPath, []);
-
+    process.exitCode.then((e) => _outBuffer.writeln('exitCode: $e'));
     _completer = Completer();
     _subscibers.add(
       process.stdout.listen((e) {
@@ -99,7 +102,10 @@ class PyTestScriptRunner {
     configLength.setUint32(0, configBin.length, Endian.little);
     process.stdin.add(configLength.buffer.asUint8List());
     process.stdin.add(configBin);
-    await _completer.future;
+    final message = await _completer.future;
+    if (message != 'connected') {
+      _outBuffer.writeln(message);
+    }
     _completer = Completer();
     return process;
   }
