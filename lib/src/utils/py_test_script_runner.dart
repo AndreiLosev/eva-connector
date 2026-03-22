@@ -31,12 +31,14 @@ class PyTestScriptRunner {
     Lmacro lmacro, {
     Map<String, dynamic> cvars = const {},
     Duration timeout = const Duration(seconds: 15),
+    List? args,
+    Map<String, dynamic>? kwargs,
   }) async {
     Process? process;
     String? result;
     try {
       process = await _runTestSvc(svcId, cvars);
-      await _runMacros(client, lmacro);
+      await _runMacros(client, lmacro, args, kwargs);
       result = await _wait(timeout, process);
     } catch (e) {
       _outBuffer.writeln(e);
@@ -70,14 +72,19 @@ class PyTestScriptRunner {
     return result;
   }
 
-  Future<void> _runMacros(RpcClient client, Lmacro lmacro) async {
+  Future<void> _runMacros(
+    RpcClient client,
+    Lmacro lmacro,
+    List? args,
+    Map<String, dynamic>? kwargs,
+  ) async {
     final path = lmacro.oid.replaceFirst(':', '/');
     client.subscribe('ACT/$path', _onActionFrane);
 
     for (var t in ['trace', 'debug', 'info', 'warn', 'error']) {
       client.subscribe('LOG/IN/$t', _onLogFrane);
     }
-    await client.runToSvc(testSvcName, lmacro);
+    await client.runToSvc(testSvcName, lmacro, args: args, kwargs: kwargs);
   }
 
   Future<Process> _runTestSvc(String svcId, Map<String, dynamic>? cvars) async {
