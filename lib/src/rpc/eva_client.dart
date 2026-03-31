@@ -27,12 +27,8 @@ class RpcClient extends _BaseClient
 
   RpcClient(super._rpc, super._factory, this.config);
 
-  factory RpcClient.short(Config config) {
-    final bus = busrt.Bus(config.ideName);
-    final rpc = busrt.Rpc(bus);
-
-    return RpcClient(rpc, Factory(), config);
-  }
+  RpcClient.short(this.config)
+    : super(busrt.Rpc(busrt.Bus(config.ideName)), Factory());
 
   Future<void> connect() => _rpc.bus.connect(config.evaSoket);
 
