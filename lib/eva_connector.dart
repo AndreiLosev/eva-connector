@@ -31,3 +31,5 @@ export 'package:yaml_writer/yaml_writer.dart';
 export 'package:yaml/yaml.dart';
 export 'package:eva_connector/src/eva-config/svcs/has_files.dart';
 export 'package:eva_connector/src/utils/export.dart';
+
+export 'package:busrt_client/src/frame.dart';
