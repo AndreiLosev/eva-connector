@@ -4,7 +4,7 @@ import 'package:msgpack_dart/msgpack_dart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/v4.dart';
 
-mixin Marcos on CanDoRpc {
+mixin Actions on CanDoRpc {
   Future<void> runToSvc(
     String svcId,
     Lmacro lmacro, {
@@ -19,10 +19,29 @@ mixin Marcos on CanDoRpc {
         'i': lmacro.oid,
         'timeout': 10000000,
         'priority': 100,
-        'params': {
-          if (args != null) 'args': args,
-          if (kwargs != null) 'kwargs': kwargs,
-        },
+        'params': {'args': ?args, 'kwargs': ?kwargs},
+      }),
+    );
+
+    await rpcRes.waitCompleted();
+  }
+
+  Future<void> actionToSvc(
+    String svcId,
+    Unit unit, {
+    Object? params,
+    Object? value,
+  }) async {
+    final rpcRes = await rpcCall(
+      'svcId',
+      'action',
+      params: serialize({
+        'uuid': Uuid.parse(UuidV4().generate()),
+        'i': unit.oid,
+        'timeout': 10000000,
+        'priority': 100,
+        'params': ?params,
+        'value': ?value,
       }),
     );
 

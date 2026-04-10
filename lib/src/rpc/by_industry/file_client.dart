@@ -31,9 +31,9 @@ mixin FileClient on CanDoRpc {
     await _baseCall0('file.put', {
       'path': path,
       'content': content,
-      if (permissions != null) 'permissions': permissions,
+      'permissions': ?permissions,
       'extract': extract.name,
-      if (download != null) 'download': download,
+      'download': ?download,
     });
   }
 
@@ -49,8 +49,8 @@ mixin FileClient on CanDoRpc {
   ]) async {
     final rawResposne = await _baseCall('list', {
       'path': path,
-      if (masks != null) 'masks': masks,
-      if (kind != null) 'kind': kind,
+      'masks': ?masks,
+      'kind': ?kind,
       'recursive': recursive,
     });
 

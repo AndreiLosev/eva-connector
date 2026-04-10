@@ -1,4 +1,5 @@
 import 'package:eva_connector/eva_connector.dart';
+import 'package:eva_connector/src/utils/item_state.dart';
 import 'package:msgpack_dart/msgpack_dart.dart';
 
 void main(List<String> args) async {
@@ -6,15 +7,11 @@ void main(List<String> args) async {
   c.evaSoket = "localhost:10001";
   final client = RpcClient.short(c);
 
-  try {
-    await client.connect();
+  await client.connect();
 
-    final [res1, res2] = await Future.wait([test1(client), test1(client)]);
-
-    print([res1, res2]);
-  } finally {
-    await client.disconnect();
-  }
+  client.subscribeForItem(Lvar('lvar:cex1/test2'), (f) {
+    print(f.toMap());
+  });
 }
 
 Future test1(RpcClient client) async {

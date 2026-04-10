@@ -12,6 +12,10 @@ sealed class Item implements Serializable {
     return {"enabled": enabled, "oid": oid};
   }
 
+  String get path => oid.replaceFirst(':', '/');
+
+  String get topic => "ST/LOC/$path";
+
   @override
   void loadFromMap(Map map) {
     enabled = map['enabled'] ?? false;

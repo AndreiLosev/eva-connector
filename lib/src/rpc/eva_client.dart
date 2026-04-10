@@ -7,7 +7,7 @@ import 'package:eva_connector/src/rpc/by_industry/file_client.dart';
 import 'package:eva_connector/src/rpc/by_industry/item_client.dart';
 import 'package:eva_connector/src/rpc/by_industry/local_auth_client.dart';
 import 'package:eva_connector/src/rpc/by_industry/log_client.dart';
-import 'package:eva_connector/src/rpc/by_industry/marcos.dart';
+import 'package:eva_connector/src/rpc/by_industry/actions.dart';
 import 'package:eva_connector/src/rpc/by_industry/svc_client.dart';
 import 'package:eva_connector/src/rpc/can_do_configuration.dart';
 import 'package:eva_connector/src/rpc/can_do_rpc.dart';
@@ -22,7 +22,13 @@ export 'package:eva_connector/src/rpc/responses/auth_key_response.dart';
 export 'package:eva_connector/src/rpc/by_industry/enums.dart';
 
 class RpcClient extends _BaseClient
-    with ItemClient, SvcClient, LogClient, FileClient, LocalAuthClient, Marcos {
+    with
+        ItemClient,
+        SvcClient,
+        LogClient,
+        FileClient,
+        LocalAuthClient,
+        Actions {
   final Config config;
 
   RpcClient(super._rpc, super._factory, this.config);
@@ -67,9 +73,21 @@ class _BaseClient implements CanDoRpc, CanDoConfiguration {
     _rpc.bus.subscribe([topic]);
   }
 
+  void subscribeForItem(Item item, void Function(ItemState state) update) {
+    subscribe(item.topic, (busrt.Frame f) {
+      update(
+        ItemState.fromFrame(f.topic!, (deserialize(f.payload) as Map).cast()),
+      );
+    });
+  }
+
   void unsubscribe(String topic) {
     _subscribers.remove(topic);
     _rpc.bus.unsubscribe([topic]);
+  }
+
+  void unsubscribeForItem(Item item) {
+    unsubscribe(item.topic);
   }
 
   @override

@@ -11,10 +11,10 @@ mixin LogClient on CanDoRpc {
   }) async {
     final params = {
       'limit': limit,
-      if (level != null) 'level': level,
-      if (msg != null) 'msg': msg,
-      if (rx != null) 'rx': rx,
-      if (time != null) 'time': time,
+      'level': ?level,
+      'msg': ?msg,
+      'rx': ?rx,
+      'time': ?time,
     };
 
     final rawRes = await coreCall("log.get", params);
