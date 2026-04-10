@@ -19,14 +19,19 @@ class PyTestScriptRunner {
   late Completer<String> _completer;
   Timer? _timeout;
 
+  final RpcClient Function() _clientFactory;
+
   final _outBuffer = StringBuffer();
 
-  PyTestScriptRunner(String binPath, String workDir)
-    : _binPath = binPath,
-      _workDir = workDir;
+  PyTestScriptRunner(
+    String binPath,
+    String workDir,
+    RpcClient Function() clientFactory,
+  ) : _binPath = binPath,
+      _workDir = workDir,
+      _clientFactory = clientFactory;
 
   Future<String> run(
-    RpcClient client,
     String svcId,
     Lmacro lmacro, {
     Map<String, dynamic> cvars = const {},
@@ -36,7 +41,9 @@ class PyTestScriptRunner {
   }) async {
     Process? process;
     String? result;
+    final client = _clientFactory();
     try {
+      await client.connect();
       process = await _runTestSvc(svcId, cvars);
       await _runMacros(client, lmacro, args, kwargs);
       result = await _wait(timeout, process);
@@ -44,7 +51,7 @@ class PyTestScriptRunner {
       _outBuffer.writeln(e);
       result ??= 'error';
     } finally {
-      await _clear(process);
+      await _clear(client, process);
     }
 
     final out = _outBuffer.toString();
@@ -52,10 +59,11 @@ class PyTestScriptRunner {
     return "$result:${Platform.lineTerminator}$out";
   }
 
-  Future<void> _clear(Process? process) async {
+  Future<void> _clear(RpcClient client, Process? process) async {
     await Future.delayed(const Duration(milliseconds: 250));
     process?.kill();
     _timeout?.cancel();
+    await client.disconnect();
   }
 
   Future<String> _wait(Duration timeout, Process process) async {
