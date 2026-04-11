@@ -29,17 +29,19 @@ class ItemResponse {
     );
   }
 
+  Map<String, dynamic> toMap() => {
+    'oid': oid,
+    'connected': connected,
+    'ieid': ieid,
+    'node': node,
+    'status': status,
+    'value': value,
+    't': t,
+  };
+
   @override
   String toString() {
-    return {
-      'oid': oid,
-      'connected': connected,
-      'ieid': ieid,
-      'node': node,
-      'status': status,
-      'value': value,
-      't': t,
-    }.toString();
+    return toMap().toString();
   }
 }
 

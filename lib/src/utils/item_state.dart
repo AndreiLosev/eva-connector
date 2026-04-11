@@ -1,5 +1,6 @@
 import 'package:eva_connector/eva_connector.dart';
 import 'package:eva_connector/src/eva-config/factory.dart';
+import 'package:eva_connector/src/rpc/responses/item_response.dart';
 
 extension EvaTimeStampToDateTime on double {
   DateTime toDateTime() =>
@@ -28,6 +29,11 @@ class ItemState {
     final oidStr = topic.split('/').skip(2).join('/').replaceFirst('/', ':');
     map['oid'] = oidStr;
     return ItemState.fromItemState(map);
+  }
+
+  factory ItemState.fromItemResponse(ItemResponse res) {
+    final oid = Factory().makeItem(res.toMap());
+    return ItemState(oid, res.status, res.value, res.t.toDateTime(), res.ieid);
   }
 
   Map<String, dynamic> toMap() => {
