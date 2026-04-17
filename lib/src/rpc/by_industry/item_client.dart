@@ -1,13 +1,15 @@
-import 'package:eva_connector/src/eva-config/items/item.dart';
-import 'package:eva_connector/src/exceptions/invalid_entity.dart';
+import 'package:eva_connector/eva_connector.dart';
 import 'package:eva_connector/src/rpc/can_do_configuration.dart';
 import 'package:eva_connector/src/rpc/can_do_rpc.dart';
 import 'package:eva_connector/src/rpc/responses/item_response.dart';
 
 mixin ItemClient on CanDoRpc, CanDoConfiguration {
-  Future<List<ItemResponse>> getItemState(String oidPattern) async {
+  Future<List<ItemState>> getItemState(String oidPattern) async {
     final rpcRes = await coreCall('item.state', {'i': oidPattern});
-    return (rpcRes as List).map(ItemResponse.fromMap).toList();
+    return (rpcRes as List)
+        .map(ItemResponse.fromMap)
+        .map(ItemState.fromItemResponse)
+        .toList();
   }
 
   Future<List<ItemResponseItem>> getItmesList(String oidPattern) async {

@@ -3,13 +3,7 @@ import 'dart:io';
 import 'package:eva_connector/eva_connector.dart';
 
 void main(List<String> arguments) async {
-  final c = Configurator.short();
-  final s = File(
-    '/home/andrei/documents/second scada project/build/back-config.yaml',
-  ).readAsStringSync();
-  final (_, svc) = c.loadConfig(s);
+  final x = {'xx': 123, 'yyy': 'wasa11'};
 
-  print(svc.first.toMap());
-
-  print((svc.first as PyMacros).scripts);
+  print({'yyy': 333, ...x});
 }

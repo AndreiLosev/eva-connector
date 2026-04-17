@@ -73,6 +73,11 @@ class _BaseClient implements CanDoRpc, CanDoConfiguration {
     _rpc.bus.subscribe([topic]);
   }
 
+  void clearAllSubscribers() {
+    _subscribers.forEach((t, fn) => unsubscribe(t));
+    _subscribers.clear();
+  }
+
   void subscribeForItem(Item item, void Function(ItemState state) update) {
     subscribe(item.topic, (busrt.Frame f) {
       update(
