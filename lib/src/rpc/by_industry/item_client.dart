@@ -2,6 +2,7 @@ import 'package:eva_connector/eva_connector.dart';
 import 'package:eva_connector/src/rpc/can_do_configuration.dart';
 import 'package:eva_connector/src/rpc/can_do_rpc.dart';
 import 'package:eva_connector/src/rpc/responses/item_response.dart';
+import 'package:eva_connector/src/rpc/responses/action_result.dart';
 
 mixin ItemClient on CanDoRpc, CanDoConfiguration {
   Future<List<ItemState>> getItemState(String oidPattern) async {
@@ -28,18 +29,19 @@ mixin ItemClient on CanDoRpc, CanDoConfiguration {
     await coreCall0('item.deploy', items.map((e) => e.toMap()));
   }
 
-  Future<Map> action(String oid, Object value) async {
+  Future<ActionResult> action(String oid, dynamic value) async {
     if (factory.makeItem({'oid': oid}) is! Unit) {
       throw InvalidOid('support only Unit: $oid');
     }
-    return await coreCall('action', {'i': oid, 'value': value, 'wait': 5});
+    final map = await coreCall('action', {'i': oid, 'value': value, 'wait': 5});
+    return ActionResult.fromMap(map);
   }
 
   Future<Map> actionToggle(String oid) async {
     if (factory.makeItem({'oid': oid}) is! Unit) {
       throw InvalidOid('support only Unit: $oid');
     }
-    return await coreCall('action', {'i': oid, 'wait': 5});
+    return await coreCall('action.toggle', {'i': oid, 'wait': 5});
   }
 
   Future<void> itemDestroy(String oid) async {
@@ -68,7 +70,7 @@ mixin ItemClient on CanDoRpc, CanDoConfiguration {
     };
   }
 
-  Future<Map> run(
+  Future<ActionResult> run(
     String oid, {
     List args = const [],
     Map<String, dynamic> kwargs = const {},
@@ -76,11 +78,13 @@ mixin ItemClient on CanDoRpc, CanDoConfiguration {
     if (factory.makeItem({'oid': oid}) is! Lmacro) {
       throw InvalidOid('support only Lmacro: $oid');
     }
-    return await coreCall('run', {
+    final map = await coreCall('run', {
       'i': oid,
       'args': args,
       'kwargs': kwargs,
       'wait': 5,
     });
+
+    return ActionResult.fromMap(map);
   }
 }
