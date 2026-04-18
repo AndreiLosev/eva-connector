@@ -45,6 +45,23 @@ class ActionResult {
       uuid: map['uuid'],
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'err': err,
+      'exitcode': exitcode,
+      'finished': finished,
+      'node': node,
+      'oid': oid,
+      'out': out,
+      'params': params.toMap(),
+      'priority': priority,
+      'status': status,
+      'svc': svc,
+      'time': time.toMap(),
+      'uuid': uuid,
+    };
+  }
 }
 
 class ActionParams {
@@ -54,10 +71,11 @@ class ActionParams {
   ActionParams({required this.status, required this.value});
 
   factory ActionParams.fromMap(Map<String, dynamic> map) {
-    return ActionParams(
-      status: map['status'],
-      value: map['value'],
-    );
+    return ActionParams(status: map['status'], value: map['value']);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {'status': status, 'value': value};
   }
 }
 
@@ -85,4 +103,15 @@ class Time {
       running: (map['running'] as double).toDateTime(),
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'accepted': accepted.millisecondsSinceEpoch / 1000,
+      'completed': completed.millisecondsSinceEpoch / 1000,
+      'created': created.millisecondsSinceEpoch / 1000,
+      'pending': pending.millisecondsSinceEpoch / 1000,
+      'running': running.millisecondsSinceEpoch / 1000,
+    };
+  }
 }
+
