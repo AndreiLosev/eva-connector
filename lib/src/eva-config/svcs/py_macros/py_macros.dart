@@ -1,7 +1,7 @@
 import 'package:eva_connector/eva_connector.dart';
 
 class PyMacros extends BaseSvc<PyMacrosConfig> implements HasFiles {
-  static const svcCommand = "venv/bin/eva4-svc-controller-py";
+  static const svcCommand = "venv/bin/softkip-svc-controller-py";
 
   Map<String, String> scripts = {};
 
