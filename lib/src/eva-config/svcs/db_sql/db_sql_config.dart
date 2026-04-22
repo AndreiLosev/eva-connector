@@ -25,13 +25,13 @@ class DbSqlConfig extends ISvcConfig {
       'skip_disconnected': skipDisconnected,
       'ignore_events': ignoreEvents,
       'keep': keep,
-      'cleanup_oids': cleanupOids,
+      'cleanup_oids': cleanupOids ?? true,
       'queue_size': queueSize,
       'panic_in': panicIn,
       'pool_size': poolSize,
       'oids': oids,
       'oids_exclude': oidsExclude,
-      'eva_pg': evaPg,
+      'eva_pg': evaPg ?? true,
       'oids_exclude_null': oidsExcludeNull,
     };
   }
