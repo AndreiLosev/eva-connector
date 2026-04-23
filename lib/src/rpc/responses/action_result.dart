@@ -1,4 +1,5 @@
 import 'package:eva_connector/eva_connector.dart';
+import 'package:uuid/uuid.dart';
 
 class ActionResult {
   final dynamic err;
@@ -7,12 +8,12 @@ class ActionResult {
   final String node;
   final String oid;
   final Object? out;
-  final ActionParams params;
+  final Object? params;
   final int priority;
   final String status;
   final String svc;
   final Time time;
-  final List<dynamic> uuid;
+  final List<int> uuid;
 
   ActionResult({
     required this.err,
@@ -37,12 +38,12 @@ class ActionResult {
       node: map['node'],
       oid: map['oid'],
       out: map['out'],
-      params: ActionParams.fromMap((map['params'] as Map).cast()),
+      params: map['params'],
       priority: map['priority'],
       status: map['status'],
       svc: map['svc'],
       time: Time.fromMap((map['time'] as Map).cast()),
-      uuid: map['uuid'],
+      uuid: (map['uuid'] as List).cast(),
     );
   }
 
@@ -54,28 +55,13 @@ class ActionResult {
       'node': node,
       'oid': oid,
       'out': out,
-      'params': params.toMap(),
+      'params': params,
       'priority': priority,
       'status': status,
       'svc': svc,
       'time': time.toMap(),
-      'uuid': uuid,
+      'uuid': Uuid.unparse(uuid),
     };
-  }
-}
-
-class ActionParams {
-  final int? status;
-  final int? value;
-
-  ActionParams({required this.status, required this.value});
-
-  factory ActionParams.fromMap(Map<String, dynamic> map) {
-    return ActionParams(status: map['status'], value: map['value']);
-  }
-
-  Map<String, dynamic> toMap() {
-    return {'status': status, 'value': value};
   }
 }
 

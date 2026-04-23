@@ -8,13 +8,9 @@ void main(List<String> args) async {
 
   await client.connect();
 
-  final res = await client.run(
-    'lmacro:for_py_macro/my_macro-3',
-    args: [1, 33, 'wasa'],
-    kwargs: {'key1': 'value1', 't': 333},
-  );
+  final res = await client.action('unit:tank1/valve2', 0);
 
-  print(res.toMap());
+  print("uuid: ${res.toMap()}");
 
   await client.disconnect();
 }
