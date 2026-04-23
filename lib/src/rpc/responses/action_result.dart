@@ -2,11 +2,11 @@ import 'package:eva_connector/eva_connector.dart';
 
 class ActionResult {
   final dynamic err;
-  final int exitcode;
+  final int? exitcode;
   final bool finished;
   final String node;
   final String oid;
-  final String out;
+  final Object? out;
   final ActionParams params;
   final int priority;
   final String status;
@@ -37,11 +37,11 @@ class ActionResult {
       node: map['node'],
       oid: map['oid'],
       out: map['out'],
-      params: ActionParams.fromMap(map['params']),
+      params: ActionParams.fromMap((map['params'] as Map).cast()),
       priority: map['priority'],
       status: map['status'],
       svc: map['svc'],
-      time: Time.fromMap(map['time']),
+      time: Time.fromMap((map['time'] as Map).cast()),
       uuid: map['uuid'],
     );
   }
@@ -65,8 +65,8 @@ class ActionResult {
 }
 
 class ActionParams {
-  final int status;
-  final int value;
+  final int? status;
+  final int? value;
 
   ActionParams({required this.status, required this.value});
 
@@ -80,11 +80,11 @@ class ActionParams {
 }
 
 class Time {
-  final DateTime accepted;
-  final DateTime completed;
-  final DateTime created;
-  final DateTime pending;
-  final DateTime running;
+  final DateTime? accepted;
+  final DateTime? completed;
+  final DateTime? created;
+  final DateTime? pending;
+  final DateTime? running;
 
   Time({
     required this.accepted,
@@ -96,22 +96,21 @@ class Time {
 
   factory Time.fromMap(Map<String, dynamic> map) {
     return Time(
-      accepted: (map['accepted'] as double).toDateTime(),
-      completed: (map['completed'] as double).toDateTime(),
-      created: (map['created'] as double).toDateTime(),
-      pending: (map['pending'] as double).toDateTime(),
-      running: (map['running'] as double).toDateTime(),
+      accepted: (map['accepted'] as double?)?.toDateTime(),
+      completed: (map['completed'] as double?)?.toDateTime(),
+      created: (map['created'] as double?)?.toDateTime(),
+      pending: (map['pending'] as double?)?.toDateTime(),
+      running: (map['running'] as double?)?.toDateTime(),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'accepted': accepted.millisecondsSinceEpoch / 1000,
-      'completed': completed.millisecondsSinceEpoch / 1000,
-      'created': created.millisecondsSinceEpoch / 1000,
-      'pending': pending.millisecondsSinceEpoch / 1000,
-      'running': running.millisecondsSinceEpoch / 1000,
+      'accepted': accepted?.toString(),
+      'completed': completed?.toString(),
+      'created': created?.toString(),
+      'pending': pending?.toString(),
+      'running': running?.toString(),
     };
   }
 }
-

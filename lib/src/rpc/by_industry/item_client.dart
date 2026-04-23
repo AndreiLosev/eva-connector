@@ -2,7 +2,8 @@ import 'package:eva_connector/eva_connector.dart';
 import 'package:eva_connector/src/rpc/can_do_configuration.dart';
 import 'package:eva_connector/src/rpc/can_do_rpc.dart';
 import 'package:eva_connector/src/rpc/responses/item_response.dart';
-import 'package:eva_connector/src/rpc/responses/action_result.dart';
+import 'package:uuid/uuid.dart';
+import 'package:uuid/v4.dart';
 
 mixin ItemClient on CanDoRpc, CanDoConfiguration {
   Future<List<ItemState>> getItemState(String oidPattern) async {
@@ -33,8 +34,14 @@ mixin ItemClient on CanDoRpc, CanDoConfiguration {
     if (factory.makeItem({'oid': oid}) is! Unit) {
       throw InvalidOid('support only Unit: $oid');
     }
-    final map = await coreCall('action', {'i': oid, 'value': value, 'wait': 5});
-    return ActionResult.fromMap(map);
+    final map = await coreCall('action', {
+      'i': oid,
+      'params': {'value': value},
+      'wait': 5,
+      'u': Uuid.parse(UuidV4().generate()),
+      'priority': 100,
+    });
+    return ActionResult.fromMap((map as Map).cast());
   }
 
   Future<Map> actionToggle(String oid) async {
@@ -80,11 +87,12 @@ mixin ItemClient on CanDoRpc, CanDoConfiguration {
     }
     final map = await coreCall('run', {
       'i': oid,
-      'args': args,
-      'kwargs': kwargs,
+      'params': {'args': args, 'kwargs': kwargs},
       'wait': 5,
+      'u': Uuid.parse(UuidV4().generate()),
+      'priority': 100,
     });
 
-    return ActionResult.fromMap(map);
+    return ActionResult.fromMap((map as Map).cast());
   }
 }
