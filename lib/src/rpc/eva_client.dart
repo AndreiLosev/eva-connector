@@ -69,31 +69,32 @@ class _BaseClient implements CanDoRpc, CanDoConfiguration {
     Uint8List? params,
   }) => _rpc.call0(target, method, params: params);
 
-  void subscribe(String topic, FutureOr<void> Function(busrt.Frame f) fn) {
+  Future<void> subscribe(
+    String topic,
+    FutureOr<void> Function(busrt.Frame f) fn,
+  ) async {
     _subscribers[topic] = fn;
-    _rpc.bus.subscribe([topic]);
+    await _rpc.bus.subscribe([topic]);
   }
 
-  void clearAllSubscribers() {
-    _subscribers.forEach((t, fn) => unsubscribe(t));
-    _subscribers.clear();
-  }
-
-  void subscribeForItem(Item item, void Function(ItemState state) update) {
-    subscribe(item.topic, (busrt.Frame f) {
+  Future<void> subscribeForItem(
+    Item item,
+    void Function(ItemState state) update,
+  ) async {
+    await subscribe(item.topic, (busrt.Frame f) {
       update(
         ItemState.fromFrame(f.topic!, (deserialize(f.payload) as Map).cast()),
       );
     });
   }
 
-  void unsubscribe(String topic) {
+  Future<void> unsubscribe(String topic) async {
     _subscribers.remove(topic);
-    _rpc.bus.unsubscribe([topic]);
+    await _rpc.bus.unsubscribe([topic]);
   }
 
-  void unsubscribeForItem(Item item) {
-    unsubscribe(item.topic);
+  Future<void> unsubscribeForItem(Item item) async {
+    await unsubscribe(item.topic);
   }
 
   @override
