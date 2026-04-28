@@ -1,10 +1,10 @@
-import 'package:eva_connector/src/eva-config/svcs/logic_manager/condition.dart';
+import 'package:eva_connector/eva_connector.dart';
 
 class Rule {
   String id;
   String oid;
   Prop prop = Prop.value;
-  Condition condition = Condition();
+  String condition = "x = 1";
   bool? breakOnMatch = false;
   int? chilloutTime = 0;
   String run;
@@ -25,10 +25,12 @@ class Rule {
       }
     }
 
+    Range.fromStr(condition);
+
     addIfNotNull('id', id);
     addIfNotNull('oid', oid);
     addIfNotNull('prop', prop.name);
-    addIfNotNull('condition', condition.toMap());
+    addIfNotNull('condition', condition);
     addIfNotNull('break', breakOnMatch);
     addIfNotNull('chillout_time', chilloutTime);
     addIfNotNull('run', run);
@@ -45,7 +47,7 @@ class Rule {
     id = map['id'];
     oid = map['oid'];
     prop = Prop.fromString(map['prop'] ?? prop.name);
-    condition.loadFromMap(map['condition']);
+    condition = map['condition'];
     breakOnMatch = map['break'];
     chilloutTime = map['chillout_time'];
     run = map['run'];
