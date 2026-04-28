@@ -8,7 +8,7 @@ class Rule {
   bool? breakOnMatch = false;
   int? chilloutTime = 0;
   String run;
-  String? initial = 'process';
+  Initial initial = Initial.process;
   bool? block = false;
   int? bit;
   List<dynamic>? args = [];
@@ -34,7 +34,7 @@ class Rule {
     addIfNotNull('break', breakOnMatch);
     addIfNotNull('chillout_time', chilloutTime);
     addIfNotNull('run', run);
-    addIfNotNull('initial', initial);
+    addIfNotNull('initial', initial.name);
     addIfNotNull('block', block);
     addIfNotNull('bit', bit);
     addIfNotNull('args', args);
@@ -73,3 +73,5 @@ enum Prop {
     };
   }
 }
+
+enum Initial { process, skip, only }
