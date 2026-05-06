@@ -28,6 +28,6 @@ class Cycle {
     run = map['run'] as String? ?? '';
     args = (map['args'] as List?);
     kwargs = (map['kwargs'] as Map?)?.cast();
-    onError = map['on_error'] as String? ?? '';
+    onError = map['on_error'] as String?;
   }
 }
