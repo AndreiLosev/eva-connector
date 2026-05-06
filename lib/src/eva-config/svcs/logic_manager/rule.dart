@@ -51,11 +51,11 @@ class Rule {
     breakOnMatch = map['break'];
     chilloutTime = map['chillout_time'];
     run = map['run'];
-    initial = map['initial'];
+    initial = (map['initial'] as String).toInitial();
     block = map['block'];
     bit = map['bit'] as int?;
-    args = map['args'];
-    kwargs = map['kwargs'];
+    args = map['args'] as List?;
+    kwargs = (map['kwargs'] as Map?)?.cast();
   }
 }
 
@@ -75,3 +75,10 @@ enum Prop {
 }
 
 enum Initial { process, skip, only }
+
+extension StringToInitial on String {
+  Initial toInitial() => Initial.values.firstWhere(
+    (e) => e.name == this,
+    orElse: () => throw Exception('invalid inital: $this'),
+  );
+}

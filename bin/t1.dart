@@ -1,23 +1,15 @@
+import 'dart:io';
+
 import 'package:eva_connector/eva_connector.dart';
-import 'package:eva_connector/src/utils/py_test_script_runner.dart';
+import 'package:eva_connector/src/eva-config/factory.dart';
 
 void main(List<String> args) async {
-  final c = Config()..evaSoket = 'localhost:10001';
-
-  final r = PyTestScriptRunner(
-    '/home/andrei/documents/my/eva_ide/script_debug_runner/bin/eva4-svc-controller-py',
-    '/home/andrei/documents/my/eva_py_macros_test',
-    () => RpcClient.short(c),
+  final configurator = Configurator(YamlWriter(), Factory());
+  final (_, s) = configurator.loadConfig(
+    File(
+      '/home/andrei/documents/ScadaProjects/build/back-config.yaml',
+    ).readAsStringSync(),
   );
 
-  final res = await r.run(
-    'scriot-dir',
-    Lmacro('lmacro:qwe/test1'),
-    cvars: {
-      'xxx': 1,
-      'yyy': true,
-      'zzz': {'first1': 132, 'second2': 345},
-    },
-  );
-  print(res);
+  s.map((e) => e.toMap()).forEach(print);
 }

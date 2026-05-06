@@ -30,7 +30,7 @@ class LogicManagerConfig extends ISvcConfig {
             .map(
               (e) =>
                   Rule(e['id'], e['run'], e['oid'])
-                    ..loadFromMap(e as Map<String, dynamic>),
+                    ..loadFromMap((e as Map).cast()),
             )
             .toList() ??
         [];
@@ -38,20 +38,14 @@ class LogicManagerConfig extends ISvcConfig {
         (map['cycles'] as List<dynamic>?)
             ?.where((e) => e['id'] is String && e['run'] is String)
             .map(
-              (e) =>
-                  Cycle(e['id'], e['run'])
-                    ..loadFromMap(e as Map<String, dynamic>),
+              (e) => Cycle(e['id'], e['run'])..loadFromMap((e as Map).cast()),
             )
             .toList() ??
         [];
     jobs =
         (map['jobs'] as List<dynamic>?)
             ?.where((e) => e['id'] is String && e['run'] is String)
-            .map(
-              (e) =>
-                  Job(e['id'], e['run'])
-                    ..loadFromMap(e as Map<String, dynamic>),
-            )
+            .map((e) => Job(e['id'], e['run'])..loadFromMap((e as Map).cast()))
             .toList() ??
         [];
   }

@@ -21,7 +21,7 @@ class Job {
     id = map['id'] as String? ?? '';
     schedule = map['schedule'] as String? ?? '0 0 * * * *';
     run = map['run'] as String? ?? '';
-    args = map['args'];
-    kwargs = map['kwargs'];
+    args = map['args'] as List?;
+    kwargs = (map['kwargs'] as Map?)?.cast();
   }
 }

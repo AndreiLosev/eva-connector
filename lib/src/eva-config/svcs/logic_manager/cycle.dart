@@ -26,8 +26,8 @@ class Cycle {
     autoStart = map['auto_start'] as bool? ?? false;
     interval = map['interval'] as double? ?? 0;
     run = map['run'] as String? ?? '';
-    args = map['args'] as List<dynamic>? ?? [];
-    kwargs = map['kwargs'] as Map<String, dynamic>? ?? {};
+    args = (map['args'] as List?);
+    kwargs = (map['kwargs'] as Map?)?.cast();
     onError = map['on_error'] as String? ?? '';
   }
 }
