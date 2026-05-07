@@ -35,6 +35,7 @@ class Lvar extends Item {
 
 class Unit extends Item with MakeAction {
   static const name = 'unit';
+  @override
   Action? action;
 
   Unit(super.oid);
@@ -64,7 +65,11 @@ class Lmacro extends Unit with MakeAction {
   Lmacro(super.oid);
 }
 
-mixin MakeAction {
+abstract interface class HasAction {
+  Action? get action;
+}
+
+mixin MakeAction implements HasAction {
   Action? makeAction(Map? map) {
     if (map == null || map['svc'] is! String) {
       return null;
