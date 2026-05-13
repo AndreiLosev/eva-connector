@@ -14,7 +14,7 @@ class MapItem {
     return {
       'offset': offset.$2 == null ? offset.$1 : "${offset.$1}/${offset.$2}",
       if ([Holding, Input].contains(reg?.runtimeType) && offset.$2 == null)
-        'type': type?.toString(),
+        'type': type?.name,
       'oid': oid,
       if (valueDelta != null && (type?.name.startsWith('real') ?? false))
         'value_delta': valueDelta,

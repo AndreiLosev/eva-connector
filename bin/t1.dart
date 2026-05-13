@@ -6,10 +6,8 @@ import 'package:eva_connector/src/eva-config/factory.dart';
 void main(List<String> args) async {
   final configurator = Configurator(YamlWriter(), Factory());
   final (_, s) = configurator.loadConfig(
-    File(
-      '/home/andrei/documents/ScadaProjects/build/back-config.yaml',
-    ).readAsStringSync(),
+    File('/home/andrei/documents/ScadaProjects/remote.yaml').readAsStringSync(),
   );
 
-  s.map((e) => e.toMap()).forEach(print);
+  s.where((e) => e.command.contains('s7')).map((e) => e.toMap()).forEach(print);
 }
