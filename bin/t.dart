@@ -11,7 +11,7 @@ void main(List<String> args) async {
   await client.connect();
 
   final res = await client.run(
-    'lmacro:for_py_macro/my_macro-3',
+    'lmacro:lmacro:for_skipt_runner/test-lmacro',
     args: [11, 12, 13],
     kwargs: {"1": 33, "2": 22},
   );

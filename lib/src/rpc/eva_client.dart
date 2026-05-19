@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:eva_connector/eva_connector.dart';
@@ -11,6 +12,7 @@ import 'package:eva_connector/src/rpc/by_industry/actions.dart';
 import 'package:eva_connector/src/rpc/by_industry/svc_client.dart';
 import 'package:eva_connector/src/rpc/can_do_configuration.dart';
 import 'package:eva_connector/src/rpc/can_do_rpc.dart';
+import 'package:eva_connector/src/utils/log_level.dart';
 import 'package:msgpack_dart/msgpack_dart.dart';
 import 'package:busrt_client/busrt_client.dart' as busrt;
 
@@ -131,5 +133,22 @@ class _BaseClient implements CanDoRpc, CanDoConfiguration {
     final fn = _subscribers[f.topic!];
     if (fn == null) return;
     fn(f);
+  }
+
+  Future<void> subscribeLogs(LogLevel level, void Function(String) fn) async {
+    for (final l in level.contains()) {
+      await subscribe("LOG/EV/${l.name}", (busrt.Frame f) {
+        if (f.payload.isEmpty) return;
+        final message = utf8.decode(f.payload);
+        final start = f.topic?.replaceFirst('LOG/EV/', '') ?? '';
+        fn("$start: $message");
+      });
+    }
+  }
+
+  Future<void> unsubscribeLogs(LogLevel level) async {
+    for (final l in level.contains()) {
+      await unsubscribe("LOG/EV/${l.name}");
+    }
   }
 }

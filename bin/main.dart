@@ -1,6 +1,6 @@
 import 'package:eva_connector/cron_decoder.dart';
+import 'package:eva_connector/eva_connector.dart';
 
 void main(List<String> arguments) async {
-  final cd = CronDecoder();
-  print(cd.decodeDetailed('0 0 12 ? * TUE *'));
+  print(Range.fromStr('x > ""'));
 }
