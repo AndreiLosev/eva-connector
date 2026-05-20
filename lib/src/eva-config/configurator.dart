@@ -74,8 +74,8 @@ class Configurator {
     }
   }
 
-  String makeConfig(List<Item> items, List<BaseSvc> svcs) {
-    final map = {
+  Map<String, dynamic> makeMap(List<Item> items, List<BaseSvc> svcs) {
+    return {
       "version": 4,
       "content": [
         {
@@ -95,8 +95,10 @@ class Configurator {
         },
       ],
     };
+  }
 
-    return _yamlWriter.write(map);
+  String makeConfig(List<Item> items, List<BaseSvc> svcs) {
+    return _yamlWriter.write(makeMap(items, svcs));
   }
 
   (List<Item>, List<BaseSvc>) loadConfig(String yaml) {
@@ -129,5 +131,33 @@ class Configurator {
         }
       }
     }
+  }
+
+  (List<Item>, List<BaseSvc>) diff(
+    (List<Item>, List<BaseSvc>) newCfg,
+    (List<Item>, List<BaseSvc>) oldCfg,
+  ) {
+    final diffItems = <Item>[];
+    final diffSvcs = <BaseSvc>[];
+    for (final o in oldCfg.$1) {
+      newCfg.$1.firstWhere(
+        (n) => n.oid == o.oid,
+        orElse: () {
+          diffItems.add(o);
+          return o;
+        },
+      );
+    }
+    for (final o in oldCfg.$2) {
+      newCfg.$2.firstWhere(
+        (n) => n.id == o.id,
+        orElse: () {
+          diffSvcs.add(o);
+          return o;
+        },
+      );
+    }
+
+    return (diffItems, diffSvcs);
   }
 }
