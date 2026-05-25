@@ -10,14 +10,9 @@ void main(List<String> args) async {
 
   await client.connect();
 
-  final res = await client.run(
-    'lmacro:lmacro:for_skipt_runner/test-lmacro',
-    args: [11, 12, 13],
-    kwargs: {"1": 33, "2": 22},
-  );
+  final res = await client.sh('ls sbin/cloud-deploy.sh');
 
-  final x = JsonEncoder.withIndent('  ');
-  print(x.convert(res.toMap()));
+  print(res.out.contains('cloud-deploy.sh'));
 
   await client.disconnect();
 }

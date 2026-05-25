@@ -47,6 +47,7 @@ class LogResponseItem {
 
   @override
   String toString() {
-    return "$dt  $h  $mod  $lvl  $msg";
+    final host = h.length > 10 ? "${h.substring(0, 8)}..." : h;
+    return "[$dt] ${host.padRight(10)} ${mod.padRight(10)}  ${lvl.toUpperCase()}  $msg";
   }
 }
