@@ -74,7 +74,11 @@ class Configurator {
     }
   }
 
-  Map<String, dynamic> makeMap(List<Item> items, List<BaseSvc> svcs) {
+  Map<String, dynamic> makeMap(
+    List<Item> items,
+    List<BaseSvc> svcs, [
+    Map<String, dynamic>? extra,
+  ]) {
     return {
       "version": 4,
       "content": [
@@ -82,23 +86,19 @@ class Configurator {
           "node": ".local",
           "items": items.map((e) => e.toMap()).toList(),
           "svcs": svcs.map((e) => e.toMap()).toList(),
-          "upload": svcs
-              .whereType<HasFiles>()
-              .map((svc) {
-                final files = svc.getFiles().entries.map(
-                  (e) => {'text': e.value.trim(), 'target': e.key},
-                );
-                return List.from(files);
-              })
-              .expand((e) => e)
-              .toList(),
+          "upload": ?_getSvcFiles(svcs),
+          "extra": ?extra,
         },
       ],
     };
   }
 
-  String makeConfig(List<Item> items, List<BaseSvc> svcs) {
-    return _yamlWriter.write(makeMap(items, svcs));
+  String makeConfig(
+    List<Item> items,
+    List<BaseSvc> svcs, [
+    Map<String, dynamic>? extra,
+  ]) {
+    return _yamlWriter.write(makeMap(items, svcs, extra));
   }
 
   (List<Item>, List<BaseSvc>) loadConfig(String yaml) {
@@ -159,5 +159,21 @@ class Configurator {
     }
 
     return (diffItems, diffSvcs);
+  }
+
+  List<Map<String, dynamic>>? _getSvcFiles(List<BaseSvc> svcs) {
+    final res = svcs
+        .whereType<HasFiles>()
+        .map((svc) {
+          return svc
+              .getFiles()
+              .entries
+              .map((e) => {'text': e.value.trim(), 'target': e.key})
+              .toList();
+        })
+        .expand((e) => e)
+        .toList();
+
+    return res.isEmpty ? null : res;
   }
 }
