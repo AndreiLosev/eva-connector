@@ -152,4 +152,13 @@ class _BaseClient implements CanDoRpc, CanDoConfiguration {
       await unsubscribe("LOG/EV/${l.name}");
     }
   }
+
+  Future<void> pubLog(LogLevel level, String message) async {
+    final res = await _rpc.bus.publish(
+      "LOG/IN/${level.name}",
+      utf8.encode(message),
+      busrt.QoS.no,
+    );
+    await res.waitCompleted();
+  }
 }

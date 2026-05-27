@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:eva_connector/eva_connector.dart';
 
 void main(List<String> args) async {
@@ -10,6 +8,7 @@ void main(List<String> args) async {
 
   await client.connect();
 
-  client.subscribe('SVC/ST/#', print);
-  client.subscribeLogs(LogLevel.info, print);
+  client.pubLog(LogLevel.error, 'test error message');
+
+  await client.disconnect();
 }
