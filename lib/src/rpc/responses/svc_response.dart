@@ -9,4 +9,6 @@ class SvcResponse {
   factory SvcResponse.fromMap(Map map) {
     return SvcResponse(map['id'], map['launcher'], map['pid'], map['status']);
   }
+
+  bool isOneline() => status == 'online';
 }

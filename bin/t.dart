@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:eva_connector/eva_connector.dart';
 
@@ -10,9 +10,6 @@ void main(List<String> args) async {
 
   await client.connect();
 
-  final res = await client.sh('ls sbin/cloud-deploy.sh');
-
-  print(res.out.contains('cloud-deploy.sh'));
-
-  await client.disconnect();
+  client.subscribe('SVC/ST/#', print);
+  client.subscribeLogs(LogLevel.info, print);
 }

@@ -16,7 +16,7 @@ enum LogLevel {
   List<LogLevel> contains() {
     final res = <LogLevel>[];
     for (final level in LogLevel.values) {
-      if (code() >= level.code()) {
+      if (code() <= level.code()) {
         res.add(level);
       }
     }
