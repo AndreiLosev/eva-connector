@@ -13,7 +13,7 @@ class ModbusConfig extends ISvcConfig {
   );
   int? panicIn;
   int pullCacheSec = 360;
-  int pullInterval = 2;
+  double pullInterval = 2;
   int queueSize = 32768;
   int retries = 2;
 
@@ -46,7 +46,7 @@ class ModbusConfig extends ISvcConfig {
   void loadFromMap(Map map) {
     actionQueueSize = map['action_queue_size'] as int? ?? actionQueueSize;
     actionsVerify = map['actions_verify'] as bool? ?? actionsVerify;
-    
+
     // Безопасная обработка modbus
     if (map['modbus'] != null) {
       modbus = (
@@ -57,13 +57,13 @@ class ModbusConfig extends ISvcConfig {
         unit: map['modbus']['unit'] as int? ?? modbus.unit,
       );
     }
-    
+
     panicIn = map['panic_in'] as int?;
     pullCacheSec = map['pull_cache_sec'] as int? ?? pullCacheSec;
-    pullInterval = map['pull_interval'] as int? ?? pullInterval;
+    pullInterval = map['pull_interval'] as double? ?? pullInterval;
     queueSize = map['queue_size'] as int? ?? queueSize;
     retries = map['retries'] as int? ?? retries;
-    
+
     // Безопасная обработка pull
     pull.clear();
     if (map['pull'] != null) {
