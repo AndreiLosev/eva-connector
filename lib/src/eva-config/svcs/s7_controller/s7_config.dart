@@ -21,7 +21,7 @@ class S7Config extends ISvcConfig {
     slot = data['slot'];
     connectionType = data['connection_type'];
     pullCacheSec = data['pull_cache_sec'];
-    pullInterval = data['pull_interval'].toDouble();
+    pullInterval = (data['pull_interval'] as num?)?.toDouble() ?? pullInterval;
     pull = (data['pull'] as List).map((e) => PullConfig.fromMap(e)).toList();
     actionMap = (data['action_map'] as Map).map(
       (k, v) => MapEntry(k as String, S7ActionMapItem.fromMap(v)),

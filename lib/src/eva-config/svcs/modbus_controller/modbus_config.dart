@@ -60,7 +60,7 @@ class ModbusConfig extends ISvcConfig {
 
     panicIn = map['panic_in'] as int?;
     pullCacheSec = map['pull_cache_sec'] as int? ?? pullCacheSec;
-    pullInterval = map['pull_interval'] as double? ?? pullInterval;
+    pullInterval = (map['pull_interval'] as num?)?.toDouble() ?? pullInterval;
     queueSize = map['queue_size'] as int? ?? queueSize;
     retries = map['retries'] as int? ?? retries;
 
