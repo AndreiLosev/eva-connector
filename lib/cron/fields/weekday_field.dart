@@ -7,20 +7,20 @@ import 'cron_field.dart';
 /// Also supports: names (SUN, MON, TUE, WED, THU, FRI, SAT), *, ?, L, #, W
 class WeekdayField extends CronField {
   static const Map<String, int> weekdayNames = {
-    'SUN': 1,
-    'SUNDAY': 1,
-    'MON': 2,
-    'MONDAY': 2,
-    'TUE': 3,
-    'TUESDAY': 3,
-    'WED': 4,
-    'WEDNESDAY': 4,
-    'THU': 5,
-    'THURSDAY': 5,
-    'FRI': 6,
-    'FRIDAY': 6,
-    'SAT': 7,
-    'SATURDAY': 7,
+    'SUN': 0,
+    'SUNDAY': 0,
+    'MON': 1,
+    'MONDAY': 1,
+    'TUE': 2,
+    'TUESDAY': 2,
+    'WED': 3,
+    'WEDNESDAY': 3,
+    'THU': 4,
+    'THURSDAY': 4,
+    'FRI': 5,
+    'FRIDAY': 5,
+    'SAT': 6,
+    'SATURDAY': 6,
   };
 
   static const Map<int, String> weekdayNamesRu = {
