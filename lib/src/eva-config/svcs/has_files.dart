@@ -1,7 +1,9 @@
-abstract interface class HasFiles {
-  Map<String, String> getFiles();
+import 'package:eva_connector/src/eva-config/other/upload_item.dart';
 
-  void putFile(String name, String content);
+abstract interface class HasFiles {
+  List<UploadItem> getFiles();
+
+  void putFile(String name, List<int> content);
 
   String basePath();
 }

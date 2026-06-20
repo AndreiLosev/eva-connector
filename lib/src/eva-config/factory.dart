@@ -1,4 +1,5 @@
 import 'package:eva_connector/src/eva-config/items/item.dart';
+import 'package:eva_connector/src/eva-config/other/upload_item.dart';
 import 'package:eva_connector/src/eva-config/svcs/base_svc.dart';
 import 'package:eva_connector/src/eva-config/svcs/db_sql/db_sql_history.dart';
 import 'package:eva_connector/src/eva-config/svcs/events_service/event_service.dart';
