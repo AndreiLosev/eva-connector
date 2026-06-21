@@ -8,7 +8,7 @@ export 'package:eva_connector/src/exceptions/unsupported_service.dart';
 export 'package:eva_connector/src/exceptions/oid_is_empty_exeption.dart';
 export 'package:eva_connector/src/eva-config/items/item.dart';
 export 'package:eva_connector/src/eva-config/items/action.dart';
-export 'package:eva_connector/src/eva-config/other/upload_item.dart';
+export 'package:eva_connector/src/eva-config/other/export.dart';
 export 'package:eva_connector/src/eva-config/svcs/bus.dart';
 export 'package:eva_connector/src/eva-config/svcs/base_svc.dart';
 export 'package:eva_connector/src/eva-config/svcs/isvc_config.dart';

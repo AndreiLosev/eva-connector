@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:eva_connector/eva_connector.dart';
-import 'package:eva_connector/src/eva-config/other/upload_item.dart';
 
 class PyMacros extends BaseSvc<PyMacrosConfig> implements HasFiles {
   static const svcCommand = "venv/bin/softkip-svc-controller-py";
@@ -23,7 +22,7 @@ class PyMacros extends BaseSvc<PyMacrosConfig> implements HasFiles {
   }
 
   @override
-  void putFile(String name, List<int> content) {
+  void putFile(String name, List<int> content, [bool checkItYourself = false]) {
     final key =
         "${Lmacro.name}:${name.replaceFirst(RegExp('^${config.macroDir}/'), '').replaceFirst(RegExp(r'\.py$'), '')}";
     scripts[key] = utf8.decode(content);

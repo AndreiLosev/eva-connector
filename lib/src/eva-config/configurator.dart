@@ -1,7 +1,7 @@
-import 'dart:convert';
-
 import 'package:eva_connector/src/eva-config/factory.dart';
 import 'package:eva_connector/src/eva-config/items/item.dart';
+import 'package:eva_connector/src/eva-config/other/extra_list.dart';
+import 'package:eva_connector/src/eva-config/other/upload_handler.dart';
 import 'package:eva_connector/src/eva-config/other/upload_item.dart';
 import 'package:eva_connector/src/eva-config/svcs/base_svc.dart';
 import 'package:eva_connector/src/eva-config/svcs/has_files.dart';
@@ -10,24 +10,32 @@ import 'package:eva_connector/src/rpc/eva_client.dart';
 import 'package:yaml/yaml.dart';
 import 'package:yaml_writer/yaml_writer.dart';
 
+typedef ConfigLoaded = (
+  List<Item>,
+  List<BaseSvc>,
+  List<UploadItem>?,
+  ExtraList? extra,
+);
+
 class Configurator {
   final YamlWriter _yamlWriter;
   final Factory _factory;
+  final UploadHandler _uploadHandler;
 
-  Configurator(this._yamlWriter, this._factory);
+  Configurator(this._yamlWriter, this._factory, this._uploadHandler);
 
   factory Configurator.short() {
-    return Configurator(YamlWriter(), Factory());
+    return Configurator(YamlWriter(), Factory(), UploadHandler());
   }
 
-  Future<(List<Item>, List<BaseSvc>)> pullAll(RpcClient client) async {
+  Future<ConfigLoaded> pullAll(RpcClient client) async {
     await client.connect();
     final items = await pullItems(client, '*');
     final svcs = await pullSvcs(client);
-    await pullFiles(client, svcs);
+    await _uploadHandler.pullSvcFiles(client, svcs);
 
     await client.disconnect();
-    return (items, svcs);
+    return (items, svcs, <UploadItem>[], ExtraList());
   }
 
   Future<List<Item>> pullItems(RpcClient client, String oidPattern) async {
@@ -58,37 +66,16 @@ class Configurator {
     return configs;
   }
 
-  Future<void> pullFiles(RpcClient client, List<BaseSvc> svcs) async {
-    for (var svc in svcs) {
-      if (svc is! HasFiles) {
-        continue;
-      }
-      final files = await client.list(
-        (svc as HasFiles).basePath(),
-        null,
-        'file',
-        true,
-      );
-
-      for (var f in files) {
-        final contnet = await client.fileGet(f.path, FileGetMode.b);
-        if (contnet.content == null) continue;
-        (svc as HasFiles).putFile(f.path, contnet.content!);
-      }
-    }
-  }
-
   Map<String, dynamic> makeMap(
     List<Item> items,
     List<BaseSvc> svcs,
-    List<UploadItem> upload, [
-    Map<String, dynamic>? extra,
-  ]) {
-    final svcUpload = _getSvcFiles(svcs);
-    final uploadAll = switch (upload.isEmpty && svcUpload.isEmpty) {
-      true => null,
-      false => [...svcUpload, ...upload].map((e) => e.toConfig()).toList(),
-    };
+    List<UploadItem> upload,
+    ExtraList extra,
+  ) {
+    final (lvar, extraItem) = _uploadHandler.makeOtheUploadConfig(upload);
+    items.add(lvar);
+    extra.afterDeploy.add(extraItem);
+
     return {
       "version": 4,
       "content": [
@@ -96,8 +83,11 @@ class Configurator {
           "node": ".local",
           "items": items.map((e) => e.toMap()).toList(),
           "svcs": svcs.map((e) => e.toMap()).toList(),
-          "upload": ?uploadAll,
-          "extra": ?extra,
+          "upload": ?_uploadHandler
+              .mergeServiceFilesAndOther(svcs, upload)
+              ?.map((e) => e.toConfig())
+              .toList(),
+          "extra": ?extra.toConfig(),
         },
       ],
     };
@@ -106,13 +96,13 @@ class Configurator {
   String makeConfig(
     List<Item> items,
     List<BaseSvc> svcs,
-    List<UploadItem> upload, [
-    Map<String, dynamic>? extra,
-  ]) {
+    List<UploadItem> upload,
+    ExtraList extra,
+  ) {
     return _yamlWriter.write(makeMap(items, svcs, upload, extra));
   }
 
-  (List<Item>, List<BaseSvc>, List<UploadItem>) loadConfig(String yaml) {
+  (List<Item>, List<BaseSvc>, List<UploadItem>?) loadConfig(String yaml) {
     final map = loadYaml(yaml);
     final items = (map['content'][0]['items'] as List)
         .map((e) => _factory.makeItem(e))
@@ -122,31 +112,20 @@ class Configurator {
         .map((e) => _factory.makeSvc(e['id'], e['params']))
         .toList();
 
-    final uploads = parseFiles(
+    final upload = _uploadHandler.parseFiles(
       (map['content'][0]['upload'] as List?)?.cast(),
+    );
+
+    final uploads = _uploadHandler.enrichServicesWithFilesAndGetOtherFiles(
+      upload,
       svcs.whereType<HasFiles>(),
     );
 
+    final extra = ExtraList(); //TODO: make extra list from config
+
+    _uploadHandler.sanitizeSystemConfig(items, extra);
+
     return (items, svcs, uploads);
-  }
-
-  List<UploadItem> parseFiles(List<Map>? files, Iterable<HasFiles> svcs) {
-    if (files == null) return [];
-    final uploads = <UploadItem>[];
-    for (var file in files) {
-      for (var svc in svcs) {
-        if (file['target']?.startsWith(svc.basePath()) ?? false) {
-          svc.putFile(
-            file['target']!.replaceFirst("${svc.basePath()}/", ''),
-            utf8.encode(file['text'] ?? ''),
-          );
-        } else {
-          uploads.add(UploadItem.fromConfig(file.cast()));
-        }
-      }
-    }
-
-    return uploads;
   }
 
   (List<Item>, List<BaseSvc>) diff(
@@ -175,15 +154,5 @@ class Configurator {
     }
 
     return (diffItems, diffSvcs);
-  }
-
-  List<UploadItem> _getSvcFiles(List<BaseSvc> svcs) {
-    return svcs
-        .whereType<HasFiles>()
-        .map((svc) {
-          return svc.getFiles();
-        })
-        .expand((e) => e)
-        .toList();
   }
 }
