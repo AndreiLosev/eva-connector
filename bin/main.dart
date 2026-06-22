@@ -1,38 +1,15 @@
-import 'dart:convert';
+import 'dart:io';
 
-import 'package:eva_connector/eva_connector.dart';
+import 'package:hashlib/hashlib.dart';
 
 void main(List<String> arguments) async {
-  // final c = Config();
-  // c.evaSoket = "localhost:10001";
-  // c.ideName = 'test.wasa.losev';
-  // final client = RpcClient.short(c);
-  //
-  // await client.connect();
-  //
-  // client.subscribeLogs(LogLevel.info, print);
+  final file = await File(
+    '/home/andrei/documents/my/eva-connector/pubspec.yaml',
+  ).readAsBytes();
+
+  print(sha256.convert(file).hex());
   print(
-    utf8.decode([
-      208,
-      159,
-      209,
-      128,
-      208,
-      184,
-      208,
-      178,
-      208,
-      181,
-      209,
-      130,
-      32,
-      208,
-      156,
-      208,
-      184,
-      209,
-      128,
-      33,
-    ]),
+    '72bc40237f6630a861a30d242d2105322df5cac0d3e5c755f4f84870bebdc807' ==
+        sha256.convert(file).hex(),
   );
 }

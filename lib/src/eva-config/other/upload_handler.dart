@@ -6,8 +6,10 @@ class UploadHandler {
   static const otherUploadConfigName =
       'lvar:eva_connector/system/other_upload_config';
 
-  List<UploadItem>? parseFiles(List<Map>? files) {
-    return files?.map((e) => UploadItem.fromConfig(e.cast())).toList();
+  List<UploadItem>? parseFiles(Map map) {
+    return (map['content'][0]['upload'] as List?)
+        ?.map((e) => UploadItem.fromConfig(e.cast()))
+        .toList();
   }
 
   Future<void> pullSvcFiles(RpcClient client, List<BaseSvc> svcs) async {
@@ -82,7 +84,11 @@ class UploadHandler {
     };
   }
 
-  (Lvar, ExtraItem) makeOtheUploadConfig(List<UploadItem> otherUpload) {
+  void enrichUploadConfig(
+    List<Item> items,
+    ExtraList extraList,
+    List<UploadItem> otherUpload,
+  ) {
     final value = otherUpload.map((e) => e.toConfig()).toList();
     final lvar = Lvar(otherUploadConfigName);
     final extra = EvaExtraItem('lvar.set', {
@@ -90,7 +96,8 @@ class UploadHandler {
       'value': value,
     }, false);
 
-    return (lvar, extra);
+    items.add(lvar);
+    extraList.afterDeploy.add(extra);
   }
 
   void sanitizeSystemConfig(List<Item> items, ExtraList extra) {
@@ -103,7 +110,7 @@ class UploadHandler {
 
     for (final fn in extra.afterDeploy) {
       if (fn is! EvaExtraItem) continue;
-      if (fn.method == 'lvar.set' && fn.params['i'] == otherUploadConfigName) {
+      if (fn.method == 'lvar.set' && fn.params?['i'] == otherUploadConfigName) {
         extra.afterDeploy.remove(fn);
         break;
       }

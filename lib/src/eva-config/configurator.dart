@@ -1,69 +1,46 @@
-import 'package:eva_connector/src/eva-config/factory.dart';
-import 'package:eva_connector/src/eva-config/items/item.dart';
-import 'package:eva_connector/src/eva-config/other/extra_list.dart';
+import 'package:eva_connector/eva_connector.dart';
+import 'package:eva_connector/src/eva-config/items/item_handler.dart';
+import 'package:eva_connector/src/eva-config/other/extra_handelr.dart';
 import 'package:eva_connector/src/eva-config/other/upload_handler.dart';
-import 'package:eva_connector/src/eva-config/other/upload_item.dart';
-import 'package:eva_connector/src/eva-config/svcs/base_svc.dart';
-import 'package:eva_connector/src/eva-config/svcs/has_files.dart';
-import 'package:eva_connector/src/exceptions/unsupported_service.dart';
-import 'package:eva_connector/src/rpc/eva_client.dart';
-import 'package:yaml/yaml.dart';
-import 'package:yaml_writer/yaml_writer.dart';
+import 'package:eva_connector/src/eva-config/svcs/svc_handler.dart';
 
 typedef ConfigLoaded = (
   List<Item>,
   List<BaseSvc>,
   List<UploadItem>?,
-  ExtraList? extra,
+  ExtraList?,
 );
 
 class Configurator {
   final YamlWriter _yamlWriter;
-  final Factory _factory;
+  final ItemHandler _itemHandler;
+  final SvcHandler _svcHandler;
   final UploadHandler _uploadHandler;
+  final ExtraHandelr _extraHandler;
 
-  Configurator(this._yamlWriter, this._factory, this._uploadHandler);
+  Configurator(
+    this._yamlWriter,
+    this._itemHandler,
+    this._svcHandler,
+    this._uploadHandler,
+    this._extraHandler,
+  );
 
   factory Configurator.short() {
-    return Configurator(YamlWriter(), Factory(), UploadHandler());
+    return Configurator(
+      YamlWriter(),
+      ItemHandler(),
+      SvcHandler(),
+      UploadHandler(),
+      ExtraHandelr(),
+    );
   }
 
   Future<ConfigLoaded> pullAll(RpcClient client) async {
-    await client.connect();
-    final items = await pullItems(client, '*');
-    final svcs = await pullSvcs(client);
+    final items = await _itemHandler.pull(client, '*');
+    final svcs = await _svcHandler.pull(client);
     await _uploadHandler.pullSvcFiles(client, svcs);
-
-    await client.disconnect();
     return (items, svcs, <UploadItem>[], ExtraList());
-  }
-
-  Future<List<Item>> pullItems(RpcClient client, String oidPattern) async {
-    final items = await client.getItmesList(oidPattern);
-    final oids = items.map((e) => e.oid).toList();
-    final itemConfigs = <Item>[];
-    for (var oid in oids) {
-      final itemConfig = await client.getItemConfig(oid);
-      itemConfigs.add(itemConfig);
-    }
-
-    return itemConfigs;
-  }
-
-  Future<List<BaseSvc>> pullSvcs(RpcClient client) async {
-    final svcs = await client.getSvcList();
-    final oids = svcs.map((e) => e.id).toList();
-    final configs = <BaseSvc>[];
-    for (var oid in oids) {
-      try {
-        final itemConfig = await client.getSvcParam(oid);
-        configs.add(itemConfig);
-      } on UnsupportedService {
-        continue;
-      }
-    }
-
-    return configs;
   }
 
   Map<String, dynamic> makeMap(
@@ -72,17 +49,16 @@ class Configurator {
     List<UploadItem> upload,
     ExtraList extra,
   ) {
-    final (lvar, extraItem) = _uploadHandler.makeOtheUploadConfig(upload);
-    items.add(lvar);
-    extra.afterDeploy.add(extraItem);
+    _uploadHandler.enrichUploadConfig(items, extra, upload);
+    _extraHandler.enrichUploadConfig(items, extra);
 
     return {
       "version": 4,
       "content": [
         {
           "node": ".local",
-          "items": items.map((e) => e.toMap()).toList(),
-          "svcs": svcs.map((e) => e.toMap()).toList(),
+          "items": _itemHandler.toConfig(items),
+          "svcs": _svcHandler.toConfig(svcs),
           "upload": ?_uploadHandler
               .mergeServiceFilesAndOther(svcs, upload)
               ?.map((e) => e.toConfig())
@@ -104,26 +80,21 @@ class Configurator {
 
   (List<Item>, List<BaseSvc>, List<UploadItem>?) loadConfig(String yaml) {
     final map = loadYaml(yaml);
-    final items = (map['content'][0]['items'] as List)
-        .map((e) => _factory.makeItem(e))
-        .toList();
+    final items = _itemHandler.parse(map);
 
-    final svcs = (map['content'][0]['svcs'] as List)
-        .map((e) => _factory.makeSvc(e['id'], e['params']))
-        .toList();
+    final svcs = _svcHandler.parse(map);
 
-    final upload = _uploadHandler.parseFiles(
-      (map['content'][0]['upload'] as List?)?.cast(),
-    );
+    final upload = _uploadHandler.parseFiles(map);
 
     final uploads = _uploadHandler.enrichServicesWithFilesAndGetOtherFiles(
       upload,
       svcs.whereType<HasFiles>(),
     );
 
-    final extra = ExtraList(); //TODO: make extra list from config
+    final extra = _extraHandler.parseConfig(map);
 
     _uploadHandler.sanitizeSystemConfig(items, extra);
+    _extraHandler.sanitizeSystemConfig(items, extra);
 
     return (items, svcs, uploads);
   }
